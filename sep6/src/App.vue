@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import HelloWorld from './components/main/Main';
 import Toolbar from "@/components/toolbar/Toolbar";
 
 export default {
@@ -20,8 +20,8 @@ export default {
   },
 
   data: () => ({
-    //
-    loggedIn: true,
+    // if you want to see Account card, change it to true
+    loggedIn: false,
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
