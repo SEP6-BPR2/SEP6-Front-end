@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Header/>
+    <Header :loggedIn="loggedIn"/>
   </div>
 </template>
 
@@ -12,6 +11,11 @@ export default {
   name: 'App',
   components: {
     Header,
+  },
+  data() {
+    return {
+      loggedIn: false
+    }
   }
 }
 </script>
