@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import SingIn from "@/components/toolbarMenu/menus/SingIn";
-import Account from "@/components/toolbarMenu/menus/Account";
+import SingIn from "@/components/toolbar/toolbarMenu/cards/SingIn";
+import Account from "@/components/toolbar/toolbarMenu/cards/Account";
 
 export default {
   name: "ToolbarMenu",

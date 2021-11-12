@@ -1,32 +1,33 @@
 <template>
-  <div id="app">
-    <Header :loggedIn="loggedIn"/>
-  </div>
+  <v-app>
+    <Toolbar :logged-in="loggedIn"></Toolbar>
+    <v-main>
+      <HelloWorld/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import HelloWorld from './components/HelloWorld';
+import Toolbar from "@/components/toolbar/Toolbar";
 
 export default {
   name: 'App',
-  components: {
-    Header,
-  },
-  data() {
-    return {
-      loggedIn: false
-    }
-  }
-}
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  components: {
+    Toolbar,
+    HelloWorld,
+  },
+
+  data: () => ({
+    //
+    loggedIn: true,
+    items: [
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me 2' },
+    ],
+  }),
+};
+</script>
