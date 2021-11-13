@@ -2,13 +2,15 @@
   <v-app>
     <Toolbar :logged-in="loggedIn"></Toolbar>
     <v-main>
-      <HelloWorld/>
+
+      <Main/>
+
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/main/Main';
+import Main from './components/main/Main';
 import Toolbar from "@/components/toolbar/Toolbar";
 
 export default {
@@ -16,7 +18,7 @@ export default {
 
   components: {
     Toolbar,
-    HelloWorld,
+    Main,
   },
 
   data: () => ({
