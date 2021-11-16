@@ -1,6 +1,8 @@
 name: Cypress Tests
 
-on: [push]
+on: 
+  pull_request:
+    branches: [main]
 defaults:
   run:
     working-directory: sep6
@@ -11,10 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Setup npm package
+      - name: Build npm package
         run: npm init -y && npm install && npm run build
-      - name: Cypress run
+      - name: Cypress run tests
         run: cypress run
  
