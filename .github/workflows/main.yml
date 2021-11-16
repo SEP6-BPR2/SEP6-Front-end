@@ -12,8 +12,9 @@ jobs:
       # and run all Cypress tests
       - name: Setup npm package
         run: npm init -y && npm install
+      - name: Build proj
+        working-directory: sep6
+        run: npm run build
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        with:
-          build: npm run serve
-          start: npm start
+ 
