@@ -1,35 +1,17 @@
 <template>
-  <v-app>
-    <Toolbar :logged-in="loggedIn"></Toolbar>
-    <v-main>
-
-      <Main/>
-
-    </v-main>
-  </v-app>
+  <Container/>
 </template>
 
 <script>
-import Main from './components/main/Main';
-import Toolbar from "@/components/toolbar/Toolbar";
+import Container from "./layout/Container";
 
 export default {
   name: 'App',
 
   components: {
-    Toolbar,
-    Main,
+    Container,
   },
 
-  data: () => ({
-    // if you want to see Account card, change it to true
-    loggedIn: false,
-    items: [
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me 2' },
-    ],
-  }),
+
 };
 </script>

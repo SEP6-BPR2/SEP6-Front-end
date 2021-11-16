@@ -1,7 +1,9 @@
 <template>
   <div class="text-center">
+    <!--        v-model="menu"-->
+    <!--        I comment out these things so they don't log in console-->
+
     <v-menu
-        v-model="menu"
         :close-on-content-click="false"
         :nudge-width="200"
         offset-x

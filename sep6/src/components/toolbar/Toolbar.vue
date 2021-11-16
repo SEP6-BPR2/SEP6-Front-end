@@ -1,19 +1,29 @@
 <template>
-  <v-toolbar dense>
+  <v-toolbar dark>
+    <router-link class="nav_list" :to=" '/'">
+    <v-toolbar-title>
+      SUPER PROJECT
+    </v-toolbar-title>
+    </router-link>
 
-    <v-toolbar-title>SUPER PROJECT</v-toolbar-title>
+
 
     <v-spacer></v-spacer>
 
+
     <v-text-field
         label="Search"
-        :rules="rules"
+        v-model="searchInput"
         hide-details="auto"
     ></v-text-field>
 
+
+    <router-link class="nav_list" :to=" {name:'results',query:{doo:searchInput}}">
     <v-btn icon>
       <v-icon>mdi-magnify</v-icon>
     </v-btn>
+    </router-link>
+
 
     <v-spacer></v-spacer>
 
@@ -78,5 +88,23 @@ export default {
 </script>
 
 <style scoped>
+.theme--dark.v-toolbar.v-sheet{
+  background-color: transparent !important;
+}
+
+.v-toolbar__content{
+  background-color: transparent;
+}
+
+.v-toolbar__title{
+  background-color: #1976d2;
+  color: white;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+a{
+  text-decoration: none;
+}
 
 </style>
