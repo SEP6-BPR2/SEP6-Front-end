@@ -12,7 +12,5 @@ jobs:
       # and run all Cypress tests
       - name: Setup npm package
         working-directory: sep6
-        run: npm init -y && npm install && npm install -g @vue/cli@latest
-      - name: Run Build
-        run: npm run build
+        run: npm init -y && npm install && npm install -g @vue/cli@latest && npm run build
  
