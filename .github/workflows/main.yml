@@ -12,9 +12,6 @@ jobs:
       # and run all Cypress tests
       - name: Setup npm package
         run: npm init -y && npm install && npm install -g @vue/cli@latest
-      - name: Build proj
-        working-directory: sep6/
-        run: npm run serve
       - name: Cypress run
         uses: cypress-io/github-action@v2
  
