@@ -1,33 +1,17 @@
 <template>
-  <v-app>
-    <Toolbar :logged-in="loggedIn"></Toolbar>
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+  <Container/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-import Toolbar from "@/components/toolbar/Toolbar";
+import Container from "./layout/Container";
 
 export default {
   name: 'App',
 
   components: {
-    Toolbar,
-    HelloWorld,
+    Container,
   },
 
-  data: () => ({
-    //
-    loggedIn: true,
-    items: [
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me 2' },
-    ],
-  }),
+
 };
 </script>
