@@ -13,7 +13,7 @@ jobs:
       - name: Setup npm package
         run: npm init -y && npm install
       - name: Build proj
-        working-directory: sep6
+        working-directory: sep6/
         run: npm run serve
       - name: Cypress run
         uses: cypress-io/github-action@v2
