@@ -28,7 +28,7 @@
       </div>
 
 
-      <div class="movie_item col-2" @mouseover="showIcon(_key)" @mouseleave="removeIcon"  v-for="(slide,_key) in slides" :key="_key" >
+      <div class="movie_item col-2 col-sm-4 col-md-2" :id="_key" @mouseover="showIcon(_key)" @mouseleave="removeIcon(_key)"  v-for="(slide,_key) in slides" :key="_key" >
         <img id="movie_item_pic" v-bind:src="'https://image.tmdb.org/t/p/w200/'+slide.poster_path">
         <div id="title_val">
           {{slide.title}}{{slide.name}}
@@ -39,10 +39,8 @@
         <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
         <!--maybe genre-->
       </div>
-
     </div>
   </div>
-
 </template>
 
 <script>
@@ -69,10 +67,12 @@ export default {
   },
   methods:{
     showIcon(key){
+      document.getElementById(key).style.zIndex = "99"
       this.showId = key
       return this.showIcon
     },
-    removeIcon(){
+    removeIcon(key){
+      document.getElementById(key).style.zIndex = "1"
       this.showId=null
     }
   },
@@ -84,6 +84,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#descript_movies{
+  padding: 3px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+
+}
 
 #select_sorter{
   width: 100px;
@@ -101,8 +109,8 @@ export default {
 }
 
 #title_val{
-  display: -webkit-box;
   max-width: 200px;
+  display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -123,7 +131,6 @@ export default {
 .movie_item:hover #movie_item_pic{
   opacity: 0.4;
 }
-
 .movies_list{
   margin-top: 100px;
   display: flex;
