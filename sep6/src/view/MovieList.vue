@@ -35,14 +35,20 @@ export default {
   data() {
     return {
       sortBy: ['date', 'rating', 'popularity'],
-      moviesToDisplay: []
+      // moviesToDisplay: [
     }//
   },
   computed: {
+    moviesToDisplay(){
+
+      return this.$store.state.trendingList
+    }
   },
   mounted() {
-    this.moviesToDisplay = this.$store.state.trendingList // TODO: loadFrom for some reason is not working here so we can not call loadMore()
+    this.$store.dispatch("getTrendingList");
+    // TODO: loadFrom for some reason is not working here so we can not call loadMore()
 
+    console.log(this.moviesToDisplay)
     window.onscroll = () => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         console.log("bottom")
