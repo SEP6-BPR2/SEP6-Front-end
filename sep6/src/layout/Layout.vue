@@ -30,6 +30,7 @@ export default {
 
 .main_container{
   background-color: #224747;
+  height: 100vh;
 }
 
 </style>

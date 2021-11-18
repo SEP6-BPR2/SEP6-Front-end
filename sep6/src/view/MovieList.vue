@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <h2>{{ loadFrom }}
     </h2>
     <div class="d-inline-flex">
@@ -11,63 +11,54 @@
       ></v-select>
     </div>
 
-    <MovieSegment/>
+    <div class="row align-md-baseline align-center">
+      <v-col class="col-lg-2 col-md-4 col-12" v-model="moviesToDisplay"
+             v-for="(movie, _key) in moviesToDisplay" :key="_key">
+        <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+movie.poster_path">
+        <div >
+          {{ movie.title }}{{ movie.name }}
+        </div>
+        <div>
+          {{ movie.release_date }}{{ movie.first_air_date }}
+        </div>
+      </v-col>
+    </div>
 
   </div>
 </template>
 
 <script>
-import MovieSegment from "@/view/MovieSegment";
 export default {
   name: "MovieList",
-  components: {MovieSegment},
+  components: {},
   props: ['loadFrom'],
   data() {
     return {
       sortBy: ['date', 'rating', 'popularity'],
-      nextItem: 1,
-      items: []
-    }
+      moviesToDisplay: []
+    }//
   },
   computed: {
-    movies() {
-      let list
-      if (this.loadFrom == "tranding") {
-        list = this.$store.state.trendingList
+  },
+  mounted() {
+    this.moviesToDisplay = this.$store.state.trendingList // TODO: loadFrom for some reason is not working here so we can not call loadMore()
+
+    window.onscroll = () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        console.log("bottom")
+        this.loadMoreMovies()
+      }
+    };
+  },
+  methods: {
+    loadMoreMovies(){
+      if (this.loadFrom === "trending") {
+        this.$store.state.trendingList.forEach(e => this.moviesToDisplay.push(e))
       } else if (this.loadFrom === "search") {
         // fetch search result from store
       } else if (this.loadFrom === "favourites") {
         // fetch favourites from store
       }
-      return list
-    }
-  },
-  mounted() {
-    const listElm = document.querySelector('#infinite-list');
-    listElm.addEventListener('scroll', () => {
-      if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
-        this.loadMore();
-      }
-    });
-
-    // Initially load some items.
-    this.loadMore();
-  },
-  methods: {
-    loadMore() {
-
-      /** This is only for this demo, you could
-       * replace the following with code to hit
-       * an endpoint to pull in more data. **/
-      this.loading = true;
-      setTimeout(() => {
-        for (var i = 0; i < 20; i++) {
-          this.items.push('Item ' + this.nextItem++);
-        }
-        this.loading = false;
-      }, 200);
-      /**************************************/
-
     }
   }
 
@@ -76,35 +67,5 @@ export default {
 
 <style scoped>
 
-.list-group-wrapper {
-  position: relative;
-}
-
-.list-group {
-  overflow: auto;
-  height: 50vh;
-  border: 2px solid #dce4ec;
-  border-radius: 5px;
-}
-
-.loading {
-  text-align: center;
-  position: absolute;
-  color: #fff;
-  z-index: 9;
-  background: purple;
-  padding: 8px 18px;
-  border-radius: 5px;
-  left: calc(50% - 45px);
-  top: calc(50% - 18px);
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0
-}
 
 </style>
