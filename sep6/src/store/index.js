@@ -8,6 +8,7 @@ const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
 const state = {
     trendingList:[]
+
 }
 
 const actions = {
@@ -16,7 +17,6 @@ const actions = {
             .then(response => {
                 commit('SET_TRENDING_LIST',response.data)
             })
-
     }
 }
 

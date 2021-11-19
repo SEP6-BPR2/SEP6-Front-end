@@ -1,10 +1,11 @@
 <template>
   <div>
 <!--    :navigate-to="someLocalProperty"-->
-    <carousel :per-page="3"  :mouse-drag="true">
+    <carousel :perPageCustom="[[300,1],[768, 3], [1024, 4]]" :autoplay="true"  :mouse-drag="true">
       <Slide v-for="(slide,_key) in slides" :key="_key">
         <div id="imgcontainer">
           <img id="carousel_img" v-bind:src="'https://image.tmdb.org/t/p/w500/'+slide.poster_path">
+          <div class="overlay2"></div>
           <div class="overlay">
             {{slide.overview}}
           </div>
@@ -155,7 +156,7 @@ export default {
 #carousel_img {
   display: block;
   width: 100%;
-  height: 650px;
+  height: 550px;
   object-position: top;
   object-fit: cover;
 }
@@ -174,5 +175,22 @@ export default {
   width: 100%;
   height: 0;
   transition: .5s ease;
+}
+
+.overlay2{
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%, rgb(34, 71, 71))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 </style>
