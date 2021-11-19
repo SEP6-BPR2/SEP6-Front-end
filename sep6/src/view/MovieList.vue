@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <h2>{{ loadFrom }}
     </h2>
     <div class="d-inline-flex">
@@ -11,7 +11,7 @@
       ></v-select>
     </div>
 
-    <div class="row align-md-baseline align-center">
+    <div class="row align-md-baseline align-center" ref="movie_list">
       <v-col class="col-lg-2 col-md-4 col-12" v-model="moviesToDisplay"
              v-for="(movie, _key) in moviesToDisplay" :key="_key">
         <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+movie.poster_path">
@@ -35,8 +35,7 @@ export default {
   data() {
     return {
       sortBy: ['date', 'rating', 'popularity'],
-      // moviesToDisplay: [
-    }//
+    }
   },
   computed: {
     moviesToDisplay(){
@@ -46,15 +45,15 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getTrendingList");
-    // TODO: loadFrom for some reason is not working here so we can not call loadMore()
 
-    console.log(this.moviesToDisplay)
+    //recycle view
     window.onscroll = () => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         console.log("bottom")
         this.loadMoreMovies()
       }
     };
+
   },
   methods: {
     loadMoreMovies(){
