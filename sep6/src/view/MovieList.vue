@@ -12,8 +12,8 @@
     </div>
 
     <div class="row align-md-baseline align-center" ref="movie_list">
-      <v-col class="col-lg-2 col-md-4 col-12" v-model="moviesToDisplay"
-             v-for="(movie, _key) in moviesToDisplay" :key="_key">
+      <v-col class="col-lg-2 col-md-4 col-12" v-model="movieList"
+             v-for="(movie, _key) in movieList" :key="_key">
         <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+movie.poster_path">
         <div >
           {{ movie.title }}{{ movie.name }}
@@ -34,17 +34,14 @@ export default {
   props: ['loadFrom'],
   data() {
     return {
+      movieList:[],
       sortBy: ['date', 'rating', 'popularity'],
     }
   },
   computed: {
-    moviesToDisplay(){
-
-      return this.$store.state.trendingList
-    }
   },
   mounted() {
-    this.$store.dispatch("getTrendingList");
+    // this.$store.dispatch("getTrendingList");
 
     //recycle view
     window.onscroll = () => {
@@ -58,7 +55,7 @@ export default {
   methods: {
     loadMoreMovies(){
       if (this.loadFrom === "trending") {
-        this.$store.state.trendingList.forEach(e => this.moviesToDisplay.push(e))
+        this.$store.state.trendingList.forEach(e => this.movieList.push(e))
       } else if (this.loadFrom === "search") {
         // fetch search result from store
       } else if (this.loadFrom === "favourites") {
