@@ -3,7 +3,7 @@
     <div
         class="row rounded-xl movie-info"
     >
-      <div class="col-md-6 col-12">
+      <div class="col-md-5 col-12">
         <img class="image" v-bind:src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path">
         <div class="">
           <label class="">Popularity: {{ movie.popularity }}</label>
@@ -20,7 +20,7 @@
         {{ rating }}
       </div>
 
-      <div class=" col-md-6 col-12 align-items-center">
+      <div class=" col-md-7 col-12 align-items-stretch movie-details">
 
         <div class="row title">
           <label>{{ movie.original_name }}</label>
@@ -30,28 +30,35 @@
           <label>Release date: {{ movie.first_air_date }}</label>
         </div>
 
-        <div class="row">
-          <v-progress-circular
-              class="col-6"
-              :size="100"
-              :width="4"
-              color="yellow"
-              :value="value"
-          >{{ movie.vote_average / 2 }} / 5
-          </v-progress-circular>
-          <div class="col-6 justify-center">
-            <label class="">{{ movie.vote_count }}</label>
+        <div class="row align-item-stretch">
+
+          <div class="col-6 votes-statistic">
+            <v-progress-circular
+                :size="100"
+                :width="4"
+                color="yellow"
+                :value="value"
+            >{{ movie.vote_average / 2 }} / 5
+            </v-progress-circular>
+            <label>Average of votes</label>
+
+          </div>
+
+          <div class="col-6 votes-statistic">
+            <v-progress-circular
+                :size="100"
+                :width="4"
+                :value="0"
+            >{{ movie.vote_count }}</v-progress-circular>
+            <label>Number of votes</label>
           </div>
         </div>
 
 
-        <div class="row">
-          <label class="col-6">Average of votes</label>
-          <label class="col-6">Number of votes</label>
-        </div>
 
 
-        <div class="row text-justify">
+
+        <div class="row text-justify movie-description">
           {{ movie.overview }}
         </div>
       </div>
@@ -62,20 +69,20 @@
       <v-btn
           class="ma-2"
           color="secondary"
-          @click="expand2 = !expand2"
+          @click="expand = !expand"
       >
         Show actors
       </v-btn>
 
       <v-expand-x-transition>
         <div
-            v-show="expand2"
+            v-show="expand"
             height="100"
             width="100"
-            class="row align-md-baseline align-center actors rounded-xl mx-auto"
+            class="row align-md-baseline actors rounded-xl mx-auto"
         >
           <h3>Actors:</h3>
-          <v-col class="col-lg-2 col-md-3 col-6 actor-card" v-model="actors"
+          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="actors"
                  v-for="(actor, _key) in actors" :key="_key">
             <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+actor.poster_path">
             <div>
@@ -85,6 +92,35 @@
         </div>
       </v-expand-x-transition>
     </v-col>
+
+    <v-col class="shrink">
+      <v-btn
+          class="ma-2"
+          color="secondary"
+          @click="expand2 = !expand2"
+      >
+        Show directors
+      </v-btn>
+
+      <v-expand-x-transition>
+        <div
+            v-show="expand2"
+            height="100"
+            width="100"
+            class="row align-md-baseline actors rounded-xl mx-auto"
+        >
+          <h3>Directors:</h3>
+          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="directors"
+                 v-for="(director, _key) in directors" :key="_key">
+            <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+director.poster_path">
+            <div>
+              {{ director.title }}{{ director.name }}
+            </div>
+          </v-col>
+        </div>
+      </v-expand-x-transition>
+    </v-col>
+
   </v-card>
 
 </template>
@@ -98,6 +134,7 @@ export default {
     interval: {},
     value: 0,
     rating: 4.5,
+    expand: false,
     expand2: false,
 
   }),
@@ -108,8 +145,10 @@ export default {
     },
     actors() {
       return this.$store.state.trendingList.slice(0, 10)
+    },
+    directors() {
+      return this.$store.state.trendingList.slice(10, 12)
     }
-
   },
   mounted() {
     this.$store.dispatch("getTrendingList");
@@ -127,6 +166,7 @@ export default {
 <style scoped>
 .movie-info-parent {
   margin-top: 55pt;
+  margin-bottom: 55pt;
   padding: 20pt;
   overflow: hidden;
   background: #4d796b;
@@ -138,19 +178,36 @@ export default {
   background: #224747;
 }
 
+.movie-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.votes-statistic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+}
+
+.movie-description {
+  flex-grow: 3;
+  padding: 10%;
+}
+
 .image {
   width: 250pt;
   height: 350pt;
 }
 
 div {
-  /*border: solid;*/
   padding: 5pt;
 }
 
 .title {
   height: auto;
 }
+
 .actors {
   background: #224747;
 }
