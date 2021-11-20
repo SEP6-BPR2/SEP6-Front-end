@@ -6,18 +6,18 @@
       <div class="col-md-6 col-12">
         <img class="image" v-bind:src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path">
         <div class="">
-          <label class="">Popularity: {{movie.popularity}}</label>
+          <label class="">Popularity: {{ movie.popularity }}</label>
         </div>
-          <v-rating
-              v-model="rating"
-              color="yellow darken-3"
-              background-color="grey darken-1"
-              empty-icon="$ratingFull"
-              half-increments
-              hover
-              clearable
-          ></v-rating>
-          {{rating}}
+        <v-rating
+            v-model="rating"
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            empty-icon="$ratingFull"
+            half-increments
+            hover
+            clearable
+        ></v-rating>
+        {{ rating }}
       </div>
 
       <div class=" col-md-6 col-12 align-items-center">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="row title">
-          <label>Release date: {{movie.first_air_date}}</label>
+          <label>Release date: {{ movie.first_air_date }}</label>
         </div>
 
         <div class="row">
@@ -37,7 +37,7 @@
               :width="4"
               color="yellow"
               :value="value"
-          >{{ movie.vote_average/2 }} / 5
+          >{{ movie.vote_average / 2 }} / 5
           </v-progress-circular>
           <div class="col-6 justify-center">
             <label class="">{{ movie.vote_count }}</label>
@@ -58,33 +58,31 @@
 
     </div>
 
-    <div class="row align-md-baseline align-center actors">
-      <h3>Actors:</h3>
-      <v-col class="col-lg-2 col-md-3 col-6 actor-card" v-model="actors"
-             v-for="(actor, _key) in actors" :key="_key">
-        <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+actor.poster_path">
-        <div >
-          {{ actor.title }}{{ actor.name }}
-        </div>
-      </v-col>
-    </div>
-
     <v-col class="shrink">
       <v-btn
           class="ma-2"
           color="secondary"
           @click="expand2 = !expand2"
       >
-        Expand X Transition
+        Show actors
       </v-btn>
 
       <v-expand-x-transition>
-        <v-card
+        <div
             v-show="expand2"
             height="100"
             width="100"
-            class="mx-auto secondary"
-        ></v-card>
+            class="row align-md-baseline align-center actors rounded-xl mx-auto"
+        >
+          <h3>Actors:</h3>
+          <v-col class="col-lg-2 col-md-3 col-6 actor-card" v-model="actors"
+                 v-for="(actor, _key) in actors" :key="_key">
+            <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+actor.poster_path">
+            <div>
+              {{ actor.title }}{{ actor.name }}
+            </div>
+          </v-col>
+        </div>
       </v-expand-x-transition>
     </v-col>
   </v-card>
@@ -108,8 +106,8 @@ export default {
       console.log(this.$store.state.trendingList[0])
       return this.$store.state.trendingList[0]
     },
-    actors(){
-      return this.$store.state.trendingList.slice(0,10)
+    actors() {
+      return this.$store.state.trendingList.slice(0, 10)
     }
 
   },
@@ -118,7 +116,7 @@ export default {
 
     this.interval = setInterval(() => {
 
-      while(this.value !== this.movie.vote_average*10){
+      while (this.value !== this.movie.vote_average * 10) {
         this.value += 1
       }
     }, 1000)
@@ -135,7 +133,7 @@ export default {
   border: none;
 }
 
-.movie-info{
+.movie-info {
   padding: 10pt;
   background: #224747;
 }
@@ -153,6 +151,9 @@ div {
 .title {
   height: auto;
 }
+.actors {
+  background: #224747;
+}
 
 .actor-card {
   -webkit-transform: scale(0.75); /* Saf3.1+, Chrome */
@@ -162,13 +163,12 @@ div {
   transform: scale(0.75);
 }
 
+/*for mobile device*/
 @media all and (max-width: 479px) {
-
   .image {
     width: 150pt;
     height: 250pt;
   }
-
 }
 
 </style>
