@@ -3,10 +3,10 @@
     <div
         class="row rounded-xl movie-info"
     >
-      <div class="col-md-6 col-12 image-views">
+      <div class="col-md-6 col-12">
         <img class="image" v-bind:src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path">
         <div class="">
-          <label class="">Views: {{movie.popularity}}</label>
+          <label class="">Popularity: {{movie.popularity}}</label>
         </div>
           <v-rating
               v-model="rating"
@@ -58,7 +58,16 @@
 
     </div>
 
-    <div class="row">{{ movie }}</div>
+    <div class="row align-md-baseline align-center actors">
+      <h3>Actors:</h3>
+      <v-col class="col-lg-2 col-md-3 col-6 actor-card" v-model="actors"
+             v-for="(actor, _key) in actors" :key="_key">
+        <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+actor.poster_path">
+        <div >
+          {{ actor.title }}{{ actor.name }}
+        </div>
+      </v-col>
+    </div>
   </v-card>
 
 </template>
@@ -76,6 +85,9 @@ export default {
       console.log(this.$store.state.trendingList[0])
       return this.$store.state.trendingList[0]
     },
+    actors(){
+      return this.$store.state.trendingList.slice(0,10)
+    }
 
   },
   mounted() {
@@ -110,6 +122,23 @@ div {
 
 .title {
   height: auto;
+}
+
+.actor-card {
+  -webkit-transform: scale(0.75); /* Saf3.1+, Chrome */
+  -moz-transform: scale(0.75); /* FF3.5+ */
+  -ms-transform: scale(0.75); /* IE9 */
+  -o-transform: scale(0.75); /* Opera 10.5+ */
+  transform: scale(0.75);
+}
+
+@media all and (max-width: 479px) {
+
+  .image {
+    width: 150pt;
+    height: 250pt;
+  }
+
 }
 
 </style>
