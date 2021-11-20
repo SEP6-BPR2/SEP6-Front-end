@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar dark>
+  <v-toolbar  dark>
     <router-link class="nav_list" :to=" '/'">
     <v-toolbar-title>
       SUPER PROJECT

@@ -1,7 +1,6 @@
 <template>
   <Container/>
 </template>
-
 <script>
 import Container from "./layout/Container";
 

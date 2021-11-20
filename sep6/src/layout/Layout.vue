@@ -30,6 +30,6 @@ export default {
 
 .main_container{
   background-color: #224747;
+  overlay: hidden;
 }
-
 </style>
