@@ -36,7 +36,7 @@
               :size="100"
               :width="4"
               color="yellow"
-              :value="movie.vote_average*10"
+              :value="value"
           >{{ movie.vote_average/2 }} / 5
           </v-progress-circular>
           <div class="col-6 justify-center">
@@ -68,6 +68,25 @@
         </div>
       </v-col>
     </div>
+
+    <v-col class="shrink">
+      <v-btn
+          class="ma-2"
+          color="secondary"
+          @click="expand2 = !expand2"
+      >
+        Expand X Transition
+      </v-btn>
+
+      <v-expand-x-transition>
+        <v-card
+            v-show="expand2"
+            height="100"
+            width="100"
+            class="mx-auto secondary"
+        ></v-card>
+      </v-expand-x-transition>
+    </v-col>
   </v-card>
 
 </template>
@@ -78,7 +97,11 @@ export default {
   components: "",
   props: {},
   data: () => ({
+    interval: {},
+    value: 0,
     rating: 4.5,
+    expand2: false,
+
   }),
   computed: {
     movie() {
@@ -92,6 +115,13 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getTrendingList");
+
+    this.interval = setInterval(() => {
+
+      while(this.value !== this.movie.vote_average*10){
+        this.value += 1
+      }
+    }, 1000)
   },
 }
 </script>
