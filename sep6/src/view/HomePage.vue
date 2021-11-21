@@ -11,7 +11,7 @@
         </div>
       </Slide>
     </carousel>
-    <MovieList :load-from="loadFrom" :movieList="movieList"/>
+    <MovieList :showSort="false" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
   </div>
 
 </template>
@@ -29,16 +29,12 @@ export default {
     Carousel,
     Slide
   },
-  data(){
-    return {
-         loadFrom: "trending"
-    }
-  },
   computed: {
     slides() {
       return this.$store.state.trendingList.slice(0,12)
     },
     movieList(){
+      console.log("I am here" + this.$store.state.trendingList )
       return this.$store.state.trendingList
     }
   },
@@ -46,6 +42,11 @@ export default {
     this.$store.dispatch("getTrendingList");
 
   },
+  methods:{
+    loadMoreMovies(){
+      this.movieList.forEach(e => this.movieList.push(e))
+    }
+  }
 
 }
 </script>
@@ -87,12 +88,12 @@ export default {
   z-index: 1;
   top: 0;
   left: 0;
-  background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* FF3.6+ */
+  /*background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); !* FF3.6+ *!*/
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%, rgb(34, 71, 71))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+  /*background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); !* Opera 11.10+ *!*/
+  /*background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); !* IE10+ *!*/
+  /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgb(34, 71, 71) 100%); !* W3C *!*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); !* IE6-9 *!*/
 }
 </style>
