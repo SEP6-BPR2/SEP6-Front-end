@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h2>{{ loadFrom }}
-    </h2>
-    <div class="d-inline-flex">
+
+    <div v-if="showSort" class="d-inline-flex">
       <v-select
           :items="sortBy"
           label="Sort By"
@@ -31,37 +30,23 @@
 export default {
   name: "MovieList",
   components: {},
-  props: ['loadFrom'],
+  props: ['showSort','movieList','moremovies'],
   data() {
     return {
-      movieList:[],
       sortBy: ['date', 'rating', 'popularity'],
     }
   },
-  computed: {
-  },
   mounted() {
-    // this.$store.dispatch("getTrendingList");
-
-    //recycle view
     window.onscroll = () => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        console.log("bottom")
-        this.loadMoreMovies()
+        // this.loadMoreMovies()
+        this.$emit("load-more")
+        //trigger to home page
       }
     };
-
   },
   methods: {
-    loadMoreMovies(){
-      if (this.loadFrom === "trending") {
-        this.$store.state.trendingList.forEach(e => this.movieList.push(e))
-      } else if (this.loadFrom === "search") {
-        // fetch search result from store
-      } else if (this.loadFrom === "favourites") {
-        // fetch favourites from store
-      }
-    }
+
   }
 
 }

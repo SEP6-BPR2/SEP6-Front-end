@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MoviePage from "../view/MoviePage";
+import SearchPage from "../view/SearchPage";
 import Account from "../components/toolbar/toolbarMenu/cards/Account";
 import HomePage from "@/view/HomePage";
 
@@ -16,7 +16,7 @@ export default new VueRouter({
         {
             path: "/results",
             name: "results",
-            component: MoviePage,
+            component: SearchPage,
             props: (route)=>({doo: route.query.doo})
         },
         {
