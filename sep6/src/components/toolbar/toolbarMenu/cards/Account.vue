@@ -6,14 +6,14 @@
       <v-list-item>
         <v-list-item-avatar>
           <img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
+              v-bind:src="img"
               alt="John"
           >
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>John Leider</v-list-item-title>
-          <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+          <v-list-item-title>{{name}}</v-list-item-title>
+<!--          <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>-->
         </v-list-item-content>
 
 
@@ -52,7 +52,7 @@
       <v-btn
           color="error"
           text
-          @click="menu = false"
+          @click="logOut"
       >
         Log out
       </v-btn>
@@ -61,17 +61,44 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: "Account",
-
+  props:['name','img','media'],
   data: () => ({
     selectedItem: 1,
+    // name:'',
     items: [
       { text: 'Real-Time', icon: 'mdi-clock' },
       { text: 'Audience', icon: 'mdi-account' },
       { text: 'Conversions', icon: 'mdi-flag' },
     ],
   }),
+  methods:{
+    logOut(){
+      let VueInstance = this
+
+      if(this.media=='Facebook')
+      {
+        window.FB.logout(function() {
+          console.log("user logged out")
+          VueInstance.$emit('logout')
+        });
+      }
+      else {
+        Vue.googleAuth().signOut(function () {
+          VueInstance.name = ''
+          VueInstance.media = ''
+          VueInstance.img=''
+          VueInstance.$emit('logout')
+          // things to do when sign-out succeeds
+        }, function () {
+          // things to do when sign-out fails
+        })
+      }
+    }
+  }
 }
 </script>
 

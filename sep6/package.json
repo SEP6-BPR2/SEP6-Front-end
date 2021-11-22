@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --https true",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -19,9 +19,13 @@
     "vue-awesome-swiper": "^4.1.1",
     "vue-carousel": "^0.18.0",
     "vue-carousel-3d": "^1.0.1",
+    "vue-google-oauth": "^1.0.5",
+    "vue-google-signin-button": "^1.0.4",
     "vuetify": "^2.4.0"
   },
   "devDependencies": {
+    "@types/gapi": "0.0.41",
+    "@types/gapi.auth2": "0.0.55",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
