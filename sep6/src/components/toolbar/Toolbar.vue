@@ -1,69 +1,41 @@
 <template>
-  <v-toolbar  dark>
-    <router-link class="nav_list" :to=" '/'">
-    <v-toolbar-title>
-      SUPER PROJECT
-    </v-toolbar-title>
-    </router-link>
+  <v-toolbar dark>
 
+    <div class="toolbar-left col-md-6 col-12">
+      <router-link :to=" '/'">
+        <v-toolbar-title class="toolbar-left-item">
+          SUPER PROJECT
+        </v-toolbar-title>
+      </router-link>
 
+      <ToolbarMenu class="toolbar-left-item" :logged-in="loggedIn"></ToolbarMenu>
 
-    <v-spacer></v-spacer>
+    </div>
 
+    <div class="toolbar-right col-md-6 col-12">
+      <div class="search">
+        <v-text-field
+            label="Search"
+            v-model="searchInput"
+            hide-details="auto"
+        ></v-text-field>
 
-    <v-text-field
-        label="Search"
-        v-model="searchInput"
-        hide-details="auto"
-    ></v-text-field>
-
-
-    <router-link class="nav_list" :to=" {name:'results',query:{doo:searchInput}}">
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
-    </router-link>
-
-
-    <v-spacer></v-spacer>
-
-    <v-menu
-        transition="slide-x-transition"
-        bottom
-        right
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-            class="deep-orange"
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-        >
-          {{chosenGenre}}
-        </v-btn>
-
-      </template>
-
-<!--      TODO: Not sure how this should look.
-                How many genres will we have?-->
-      <v-list >
-        <v-list-item
-            v-model="chosenGenre"
-            v-for="item in genres"
-            :key="item.id"
-        >
-          <router-link class="nav_list" :to=" {name:'results',query:{genre:item}}">
-          <v-btn block>
-            {{item}}
+        <router-link :to=" {name:'results',query:{doo:searchInput}}">
+          <v-btn icon>
+            <v-icon>mdi-magnify</v-icon>
           </v-btn>
-          </router-link>
-        </v-list-item>
-      </v-list>
+        </router-link>
+      </div>
 
-    </v-menu>
-
-    <ToolbarMenu :logged-in="loggedIn"></ToolbarMenu>
+      <v-select
+          hide-details
+          class="toolbar-left-item"
+          :items="genres"
+          label="Genre"
+          dense
+          outlined
+      ></v-select>
+    </div>
 
   </v-toolbar>
 </template>
@@ -90,24 +62,65 @@ export default {
 }
 </script>
 
-<style scoped>
-.theme--dark.v-toolbar.v-sheet{
+<style>
+.theme--dark.v-toolbar.v-sheet {
   background-color: transparent !important;
 }
 
-.v-toolbar__content{
+.v-toolbar__content {
   background-color: transparent;
+  justify-content: space-between;
 }
 
-.v-toolbar__title{
+.v-toolbar__title {
   background-color: #1976d2;
   color: white;
   border-radius: 4px;
   padding: 3px;
 }
+.v-input{
+  width: 100pt;
+}
 
-a{
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-right {
+  display: flex;
+  margin-top: 10pt;
+}
+
+.toolbar-left-item {
+  margin: 5pt;
+}
+
+.search{
+  display: flex;
+  flex-grow: 5;
+}
+
+a {
   text-decoration: none;
+}
+
+@media all and (max-width: 479px) {
+  .v-toolbar__content {
+    flex-direction: column;
+  }
+  .v-toolbar {
+    height: 105pt !important;
+  }
+
+  .toolbar-left {
+    justify-content: space-between;
+  }
+
+  .toolbar-right{
+    margin-top: 0pt;
+  }
+
 }
 
 </style>
