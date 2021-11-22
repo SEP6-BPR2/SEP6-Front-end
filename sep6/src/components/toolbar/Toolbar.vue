@@ -73,10 +73,11 @@ import ToolbarMenu from "@/components/toolbar/toolbarMenu/ToolbarMenu";
 
 export default {
   name: "Toolbar",
-  props: ['loggedIn'],
-
   components: {
     ToolbarMenu,
+  },
+  computed:{
+
   },
 
   data: () => ({
