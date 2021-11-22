@@ -53,11 +53,12 @@
             v-for="item in genres"
             :key="item.id"
         >
+          <router-link class="nav_list" :to=" {name:'results',query:{genre:item}}">
           <v-btn block>
             {{item}}
           </v-btn>
+          </router-link>
         </v-list-item>
-
       </v-list>
 
     </v-menu>
@@ -82,6 +83,7 @@ export default {
     //
     searchInput: "",
     chosenGenre: "Genre",
+    loggedIn:false,
     genres: ["comedy", "horror"]
   }),
 }

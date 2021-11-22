@@ -2,7 +2,7 @@
   <v-app>
   <Layout>
     <template v-slot:main_header>
-        <Toolbar :logged-in="loggedIn"></Toolbar>
+        <Toolbar></Toolbar>
     </template>
     <template>
       <router-view/>
@@ -20,7 +20,7 @@ export default {
   components: { Layout, Toolbar},
   data: () => ({
     //
-    loggedIn: true,
+    // loggedIn: false,
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },

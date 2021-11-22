@@ -17,7 +17,7 @@ export default new VueRouter({
             path: "/results",
             name: "results",
             component: SearchPage,
-            props: (route)=>({doo: route.query.doo})
+            props: (route)=>({doo: route.query.doo},{genre: route.query.genre}),
         },
         {
             path: "/account",

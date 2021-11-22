@@ -22,7 +22,7 @@
       <!--      IF -->
       <Account v-if="loggedIn"></Account>
       <!--      ELSE -->
-      <SingIn v-else></SingIn>
+      <SingIn></SingIn>
 
     </v-menu>
   </div>
@@ -34,8 +34,13 @@ import Account from "@/components/toolbar/toolbarMenu/cards/Account";
 
 export default {
   name: "ToolbarMenu",
-  components: {Account, SingIn},
-  props: ['loggedIn'],
+  components: {
+    Account,
+    SingIn
+  },
+  props: {
+    loggedIn: Boolean,
+  },
 }
 </script>
 
