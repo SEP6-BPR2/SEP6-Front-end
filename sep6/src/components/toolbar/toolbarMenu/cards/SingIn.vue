@@ -52,9 +52,8 @@ export default {
       await this.initFacebook();
       window.FB.login(function(response) {
         if (response.authResponse) {
-          let im = document.getElementById("profileImage").setAttribute("src", "http://graph.facebook.com/" + response.id + "/picture?type=normal");
-          console.log(response.first_name)
-          this.$emit("load-more",[response.id,response.first_name,im])
+          console.log(response + "####################")
+          this.$emit("load-more",[response.id,response.first_name])
           alert("You are logged in &amp; cookie set!");
           // a PHP script that grabs the signed request from the cookie.
         } else {
