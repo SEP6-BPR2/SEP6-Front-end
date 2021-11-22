@@ -129,7 +129,9 @@
 export default {
   name: "MoviePage",
   components: "",
-  props: {},
+  props: {
+    movie:[]
+  },
   data: () => ({
     interval: {},
     value: 0,
@@ -139,10 +141,6 @@ export default {
 
   }),
   computed: {
-    movie() {
-      console.log(this.$store.state.trendingList[0])
-      return this.$store.state.trendingList[0]
-    },
     actors() {
       return this.$store.state.trendingList.slice(0, 10)
     },
