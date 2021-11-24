@@ -34,7 +34,6 @@ export default {
       return this.$store.state.trendingList.slice(0,12)
     },
     movieList(){
-      console.log("I am here" + this.$store.state.trendingList )
       return this.$store.state.trendingList
     }
   },

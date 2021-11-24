@@ -46,8 +46,12 @@
 
 <script>
 import Vue from 'vue'
+import { getFirestore,doc, setDoc} from "firebase/firestore";
+
+
 export default {
   name: "SingIn",
+  props:['shouldCheckOut'],
   data(){
     return{
       googleSignInParams: {
@@ -55,8 +59,15 @@ export default {
       }
     }
   },
+  computed:{
+    getShouldCheckout(){
+      let checkout = this.shouldCheckOut
+      return checkout
+    }
+  },
   created() {
-    this.checkLoggedIn()
+    this.checkLoggedInFB()
+    this.checkLoggedInGoogle()
   },
   components:{
   },
@@ -69,8 +80,13 @@ export default {
       window.FB.login(function(response) {
         if (response.authResponse) {
           window.FB.api('/me', {fields: 'id,name,picture'},function (response) {
-            // console.log('Successful login for: ' + response.picture.data.url);
-            VueInstance.emit(response)
+            let res = {
+              id: response.id,
+              name: response.name,
+              picture:response.picture.data.url,
+              media:"Facebook"
+            }
+            VueInstance.emit(res)
           })
         } else {
           alert("User cancelled login or did not fully authorize.");
@@ -100,14 +116,12 @@ export default {
     },
     emit(response){
       this.$emit("logIn",response)
-
     },
 
-    async loginGoogle(){
+     loginGoogle(){
       let VueInstance = this
        Vue.googleAuth().directAccess()
        Vue.googleAuth().signIn(function (googleUser) {
-        console.log(googleUser.Au)
          let resTemp = googleUser.Au
          let response = {
               id: resTemp.GW,
@@ -115,6 +129,7 @@ export default {
               picture:resTemp.mN
          }
          response.media="Google"
+         // VueInstance.firebaseSignIn(response.id) --we need this later to add favourite
          VueInstance.$emit('logIn',response)
       }, function (error) {
         let gj = JSON.stringify(error)
@@ -122,19 +137,44 @@ export default {
       })
     },
 
-    checkLoggedIn(){
+    checkLoggedInFB(){
       let VueInstance = this
 
       window.FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
         if(response.status==='connected'){
           window.FB.api('/me', {fields: 'id,name,picture'},function (response) {
-            // console.log('Successful login for: ' + response.picture.data.url);
             response.picture = response.picture.data.url
             response.media="Facebook"
             VueInstance.emit(response)
           })
         }
       });
+    },
+
+    checkLoggedInGoogle(){
+      let VueInstance = this
+
+      if(Vue.googleAuth().getIsSignedIn().Mb==true && this.getShouldCheckout==false){
+        let resTemp = Vue.googleAuth().getCurrentUser()
+        let response = {
+          id: resTemp.GW,
+          name: resTemp.jf,
+          picture:resTemp.mN
+        }
+        response.media="Google"
+        VueInstance.$emit('logIn',response)
+      }
+    },
+
+     async firebaseSignIn(userId){
+      let db = getFirestore()
+       try {
+         await setDoc(doc(db, "UserMovies",userId), {
+           Movie: ["Adas"],
+         });
+       } catch (e) {
+         console.error("Error adding document: ", e);
+       }
     }
   }
 }

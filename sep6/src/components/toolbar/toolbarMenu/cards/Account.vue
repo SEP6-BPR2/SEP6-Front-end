@@ -27,7 +27,6 @@
       <v-list-item>
         <v-list-item-action>
           <v-switch
-              v-model="message"
               color="purple"
           ></v-switch>
         </v-list-item-action>
@@ -76,27 +75,24 @@ export default {
     ],
   }),
   methods:{
-    logOut(){
+    async logOut(){
       let VueInstance = this
 
       if(this.media=='Facebook')
       {
-        window.FB.logout(function() {
-          console.log("user logged out")
-          VueInstance.$emit('logout')
+       await window.FB.logout(function() {
+         VueInstance.$emit('logout')
         });
       }
       else {
-        Vue.googleAuth().signOut(function () {
-          VueInstance.name = ''
-          VueInstance.media = ''
-          VueInstance.img=''
+       await Vue.googleAuth().signOut(function () {
           VueInstance.$emit('logout')
-          // things to do when sign-out succeeds
+         // things to do when sign-out succeeds
         }, function () {
           // things to do when sign-out fails
         })
       }
+
     }
   }
 }
