@@ -13,12 +13,12 @@
     <div class="movie_view row align-md-baseline align-center" ref="movie_list">
       <v-col class="movie_item col-lg-2 col-md-4 col-12" v-model="movieList"
              v-for="(movie, _key)   in movieList" v-on:click="openModal(movie)"  @mouseover="activeOver(_key)" @mouseleave="removeOver(_key)" :key="_key">
-        <img id="movie_item_pic"  v-bind:src="'https://image.tmdb.org/t/p/w200/'+movie.poster_path">
+        <img id="movie_item_pic"  v-bind:src="`${movie.poster}`">
         <div >
-          {{ movie.title }}{{ movie.name }}
+          {{ movie.title }}
         </div>
         <div>
-          {{ movie.release_date }}{{ movie.first_air_date }}
+          {{ "movie.release_date" }}
         </div>
         <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
       </v-col>

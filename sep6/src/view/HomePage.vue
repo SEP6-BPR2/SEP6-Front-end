@@ -34,16 +34,16 @@ export default {
       return this.$store.state.trendingList.slice(0,12)
     },
     movieList(){
-      return this.$store.state.trendingList
+      return this.$store.state.movieList
     }
   },
   mounted() {
     this.$store.dispatch("getTrendingList");
-
+    this.$store.dispatch("getMovieList")
   },
   methods:{
     loadMoreMovies(){
-      this.movieList.forEach(e => this.movieList.push(e))
+      this.$store.dispatch("getMovieList")
     }
   }
 

@@ -1,5 +1,6 @@
 <template>
 <div>
+  <div>{{"A"+doo}}</div>
   <MovieList class="list_movies" :show-sort="true" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
 </div>
 </template>
@@ -17,15 +18,15 @@ export default {
   },
   computed: {
     movieList(){
-      return this.$store.state.trendingList
+      return this.$store.state.searchResultList
     }
   },
   mounted() {
-    this.$store.dispatch("getTrendingList");
+    this.$store.dispatch("getSearchResultList",{searchInput: this.doo});
   },
   methods:{
     loadMoreMovies(){
-      this.movieList.forEach(e => this.movieList.push(e))
+      this.$store.dispatch("getSearchResultList", {searchInput: this.doo})
     }
   }
 }
