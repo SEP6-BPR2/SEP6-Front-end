@@ -26,7 +26,7 @@
           v-model="isShow"
 
       >
-        <MoviePage :movie="currentMovie"/>
+        <MoviePage :movie-id="currentMovie.id"/>
       </VueModal>
     </div>
 

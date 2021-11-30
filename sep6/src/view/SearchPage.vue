@@ -16,6 +16,9 @@ export default {
       default: null,
     }
   },
+  watch:{
+    doo: () => {location.reload();}
+  },
   computed: {
     movieList(){
       return this.$store.state.searchResultList

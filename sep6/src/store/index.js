@@ -17,6 +17,7 @@ let searchResultListOffset = 0
 const state = {
     movieList: [],
     searchResultList: [],
+    movieDetails: {},
     trendingList: [],
     movie: {}
 }
@@ -37,6 +38,13 @@ const actions = {
                 commit('SET_SEARCH_RESULT_LIST', response.data)
             })
         searchResultListOffset+=moviesToDisplayPerPage
+    },
+
+    getMovieDetails({commit},{movieId}) {
+        axios.get(`${backendUrl}/movies/details/${movieId}`)
+            .then(response => {
+                commit('SET_MOVIE_DETAILS', response.data)
+            })
     },
 
     getTrendingList({commit}) {
@@ -61,6 +69,9 @@ const mutations = {
     },
     SET_SEARCH_RESULT_LIST(state, searchResultList) {
         searchResultList.forEach(movie =>{state.searchResultList.push(movie)})
+    },
+    SET_MOVIE_DETAILS(state, movieDetails){
+        state.movieDetails = movieDetails
     },
     SET_TRENDING_LIST(state, trendingList) {
         state.trendingList = trendingList.results

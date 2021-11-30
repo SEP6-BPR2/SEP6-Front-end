@@ -3,10 +3,10 @@
     <carousel :perPageCustom="[[300,1],[768, 3], [1024, 4]]" :autoplay="true"  :mouse-drag="true">
       <Slide v-for="(slide,_key) in slides" :key="_key">
         <div id="imgcontainer">
-          <img id="carousel_img" v-bind:src="'https://image.tmdb.org/t/p/w500/'+slide.poster_path">
+          <img id="carousel_img" v-bind:src="`${slide.poster}`">
           <div class="overlay2"></div>
           <div class="overlay">
-            {{slide.overview}}
+            {{slide.description}}
           </div>
         </div>
       </Slide>
@@ -31,14 +31,13 @@ export default {
   },
   computed: {
     slides() {
-      return this.$store.state.trendingList.slice(0,12)
+      return this.$store.state.movieList.slice(0,12)
     },
     movieList(){
       return this.$store.state.movieList
     }
   },
   mounted() {
-    this.$store.dispatch("getTrendingList");
     this.$store.dispatch("getMovieList")
   },
   methods:{

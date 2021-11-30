@@ -4,7 +4,7 @@
         class="row rounded-xl movie-info"
     >
       <div class="col-md-5 col-12">
-        <img class="image" v-bind:src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path">
+        <img class="image" v-bind:src="`${movie.posterURL}`">
         <div class="">
           <label class="">Popularity: {{ movie.popularity }}</label>
         </div>
@@ -23,11 +23,11 @@
       <div class=" col-md-7 col-12 align-items-stretch movie-details">
 
         <div class="row title">
-          <label>{{ movie.original_name }}</label>
+          <label>{{ movie.title }}</label>
         </div>
 
         <div class="row title">
-          <label>Release date: {{ movie.first_air_date }}</label>
+          <label>Release date: {{ movie.year }}</label>
         </div>
 
         <div class="row align-item-stretch">
@@ -38,7 +38,7 @@
                 :width="4"
                 color="yellow"
                 :value="value"
-            >{{ movie.vote_average / 2 }} / 5
+            >{{ movie.imdbRating / 2 }} / 5
             </v-progress-circular>
             <label>Average of votes</label>
 
@@ -49,7 +49,7 @@
                 :size="100"
                 :width="4"
                 :value="0"
-            >{{ movie.vote_count }}</v-progress-circular>
+            >{{ movie.imdbVotes }}</v-progress-circular>
             <label>Number of votes</label>
           </div>
         </div>
@@ -82,11 +82,11 @@
             class="row align-md-baseline actors rounded-xl mx-auto"
         >
           <h3>Actors:</h3>
-          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="actors"
-                 v-for="(actor, _key) in actors" :key="_key">
-            <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+actor.poster_path">
+          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="movie.actors"
+                 v-for="(actor, _key) in movie.actors" :key="_key">
+            <img v-bind:src="`${movie.posterURL}`">
             <div>
-              {{ actor.title }}{{ actor.name }}
+              {{ actor }}
             </div>
           </v-col>
         </div>
@@ -110,11 +110,11 @@
             class="row align-md-baseline actors rounded-xl mx-auto"
         >
           <h3>Directors:</h3>
-          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="directors"
-                 v-for="(director, _key) in directors" :key="_key">
-            <img v-bind:src="'https://image.tmdb.org/t/p/w200/'+director.poster_path">
+          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="movie.director"
+                 v-for="(director, _key) in [movie.director]" :key="_key">
+            <img v-bind:src="`${movie.posterURL}`">
             <div>
-              {{ director.title }}{{ director.name }}
+              {{ director }}
             </div>
           </v-col>
         </div>
@@ -130,7 +130,7 @@ export default {
   name: "MoviePage",
   components: "",
   props: {
-    movie:[]
+    movieId: null
   },
   data: () => ({
     interval: {},
@@ -141,19 +141,19 @@ export default {
 
   }),
   computed: {
-    actors() {
-      return this.$store.state.trendingList.slice(0, 10)
+    movie(){
+      return this.$store.state.movieDetails
     },
     directors() {
       return this.$store.state.trendingList.slice(10, 12)
     }
   },
   mounted() {
-    this.$store.dispatch("getTrendingList");
+    this.$store.dispatch("getMovieDetails", {movieId: this.movieId});
 
     this.interval = setInterval(() => {
 
-      while (this.value !== this.movie.vote_average * 10) {
+      while (this.value !== this.movie.imdbRating * 10) {
         this.value += 1
       }
     }, 1000)
