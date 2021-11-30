@@ -26,8 +26,9 @@
           </v-btn>
         </router-link>
       </div>
-
       <v-select
+          v-on:change="reloadList"
+          v-model="chosenGenre"
           hide-details
           class="toolbar-left-item"
           :items="genres"
@@ -48,17 +49,29 @@ export default {
   components: {
     ToolbarMenu,
   },
-  computed:{
+  computed: {
 
+    genres() {
+      let newlist = this.$store.state.allGenres.map(genreObj => genreObj.genreName).filter(name => name !== "N/A")
+      newlist.push("any")
+      return newlist
+    }
   },
 
   data: () => ({
-    //
     searchInput: "",
-    chosenGenre: "Genre",
-    loggedIn:false,
-    genres: ["comedy", "horror"]
+    chosenGenre: "any",
+    loggedIn: false,
+    genresList: []
   }),
+  mounted() {
+    this.$store.dispatch("getAllGenres")
+  },
+  methods: {
+    reloadList() {
+      this.$router.push({name: 'results', query: {genre: this.chosenGenre}})
+    }
+  }
 }
 </script>
 
@@ -78,7 +91,8 @@ export default {
   border-radius: 4px;
   padding: 3px;
 }
-.v-input{
+
+.v-input {
   width: 100pt;
 }
 
@@ -96,7 +110,7 @@ export default {
   margin: 5pt;
 }
 
-.search{
+.search {
   display: flex;
   flex-grow: 5;
 }
@@ -109,6 +123,7 @@ a {
   .v-toolbar__content {
     flex-direction: column;
   }
+
   .v-toolbar {
     height: 105pt !important;
   }
@@ -117,7 +132,7 @@ a {
     justify-content: space-between;
   }
 
-  .toolbar-right{
+  .toolbar-right {
     margin-top: 0pt;
   }
 

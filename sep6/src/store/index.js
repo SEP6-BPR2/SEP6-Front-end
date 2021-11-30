@@ -15,6 +15,7 @@ let movieListOffset = 0
 let searchResultListOffset = 0
 
 const state = {
+    allGenres: [],
     movieList: [],
     searchResultList: [],
     movieDetails: {},
@@ -24,16 +25,17 @@ const state = {
 
 const actions = {
 
-    getMovieList({commit}) {
-        axios.get(`${backendUrl}/movies/list/year/${moviesToDisplayPerPage}/${movieListOffset}/any/1`)
+    getMovieList({commit}, {genre}) {
+        axios.get(`${backendUrl}/movies/list/year/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
             .then(response => {
                 commit('SET_MOVIE_LIST', response.data)
             })
         movieListOffset+=moviesToDisplayPerPage
     },
 
-    getSearchResultList({commit},{searchInput}) {
-        axios.get(`${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/any/1/${searchInput}`)
+    getSearchResultList({commit},{searchInput, genre}) {
+        let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/${genre}/1/${searchInput}`
+        axios.get(url)
             .then(response => {
                 commit('SET_SEARCH_RESULT_LIST', response.data)
             })
@@ -44,6 +46,13 @@ const actions = {
         axios.get(`${backendUrl}/movies/details/${movieId}`)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
+            })
+    },
+
+    getAllGenres({commit}){
+        axios.get(`${backendUrl}/genres/all`)
+            .then(response => {
+                commit('SET_All_GENRES', response.data)
             })
     },
 
@@ -64,6 +73,9 @@ const actions = {
 }
 
 const mutations = {
+    SET_All_GENRES(state, genres){
+      state.allGenres = genres
+    },
     SET_MOVIE_LIST(state, trendingMovieList) {
         trendingMovieList.forEach(movie =>{state.movieList.push(movie)})
     },
