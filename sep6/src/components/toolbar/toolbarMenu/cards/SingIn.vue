@@ -26,7 +26,7 @@
           outlined
           rounded
           text
-          @click="logInWithFacebook"
+          @click="login('Facebook')"
       >
         Facebook
       </v-btn>
@@ -35,7 +35,7 @@
           outlined
           rounded
           text
-          @click="loginGoogle"
+          @click="login('Google')"
       >
         Google
       </v-btn>
@@ -45,13 +45,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { getFirestore,doc, setDoc} from "firebase/firestore";
-
+import {getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider}  from 'firebase/auth'
 
 export default {
   name: "SingIn",
-  props:['shouldCheckOut'],
+  props:['shouldCheckOut','userT'],
   data(){
     return{
       googleSignInParams: {
@@ -60,122 +58,33 @@ export default {
     }
   },
   computed:{
-    getShouldCheckout(){
-      let checkout = this.shouldCheckOut
-      return checkout
-    }
-  },
-  created() {
-    this.checkLoggedInFB()
-    this.checkLoggedInGoogle()
   },
   components:{
   },
   methods:{
-    async logInWithFacebook() {
+     login(mediaProv){
       let VueInstance = this
+      let auth = getAuth();
+      let provider = mediaProv == "Google" ? new GoogleAuthProvider() : new FacebookAuthProvider()
+      signInWithPopup(auth,provider)
+       .then(()=>{
+         let currentUser = auth.currentUser
 
-      await this.loadFacebookSDK(document, "script", "facebook-jssdk");
-      await this.initFacebook();
-      window.FB.login(function(response) {
-        if (response.authResponse) {
-          window.FB.api('/me', {fields: 'id,name,picture'},function (response) {
-            let res = {
-              id: response.id,
-              name: response.name,
-              picture:response.picture.data.url,
-              media:"Facebook"
-            }
-            VueInstance.emit(res)
-          })
-        } else {
-          alert("User cancelled login or did not fully authorize.");
-        }
-      });
-      return false;
-    },
-    async initFacebook() {
-      window.fbAsyncInit = function() {
-        window.FB.init({
-          appId: 1171316110063853, //You will need to change this
-          cookie: true, // This is important, it's not enabled by default
-          version: "v13.0"
-        });
-      };
-    },
-    async loadFacebookSDK(d, s, id) {
-      var js,
-          fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    },
-    emit(response){
-      this.$emit("logIn",response)
-    },
+         console.log(JSON.stringify(currentUser) + "####")
 
-     loginGoogle(){
-      let VueInstance = this
-       Vue.googleAuth().directAccess()
-       Vue.googleAuth().signIn(function (googleUser) {
-         let resTemp = googleUser.Au
-         let response = {
-              id: resTemp.GW,
-              name: resTemp.jf,
-              picture:resTemp.mN
-         }
-         response.media="Google"
-         // VueInstance.firebaseSignIn(response.id) --we need this later to add favourite
-         VueInstance.$emit('logIn',response)
-      }, function (error) {
-        let gj = JSON.stringify(error)
-        console.log(gj + "error")
-      })
+         currentUser.getIdToken(true).then(()=>{
+           let response = {
+             id: currentUser.uid,
+             name: currentUser.displayName,
+             picture:currentUser.photoURL,
+           }
+           VueInstance.$emit('logIn',response)
+           this.$store.dispatch("registerUser",{userId: response.id,username: response.name})
+         })
+       }).catch((error) => {
+        console.log("error " + error)
+       })
     },
-
-    checkLoggedInFB(){
-      let VueInstance = this
-
-      window.FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-        if(response.status==='connected'){
-          window.FB.api('/me', {fields: 'id,name,picture'},function (response) {
-            response.picture = response.picture.data.url
-            response.media="Facebook"
-            VueInstance.emit(response)
-          })
-        }
-      });
-    },
-
-    checkLoggedInGoogle(){
-      let VueInstance = this
-
-      if(Vue.googleAuth().getIsSignedIn().Mb==true && this.getShouldCheckout==false){
-        let resTemp = Vue.googleAuth().getCurrentUser()
-        let response = {
-          id: resTemp.GW,
-          name: resTemp.jf,
-          picture:resTemp.mN
-        }
-        response.media="Google"
-        VueInstance.$emit('logIn',response)
-      }
-    },
-
-     async firebaseSignIn(userId){
-      let db = getFirestore()
-       try {
-         await setDoc(doc(db, "UserMovies",userId), {
-           Movie: ["Adas"],
-         });
-       } catch (e) {
-         console.error("Error adding document: ", e);
-       }
-    }
   }
 }
 </script>

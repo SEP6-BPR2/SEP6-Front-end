@@ -18,6 +18,9 @@
             clearable
         ></v-rating>
         {{ rating }}
+        <font-awesome-icon @click="removeFav" v-if="isFav===true" class="icon_movie" style="color:hotpink" icon="heart"/>
+        <font-awesome-icon @click="addFav" v-else class="icon_movie" style="color:gray" icon="heart"/>
+
       </div>
 
       <div class=" col-md-7 col-12 align-items-stretch movie-details">
@@ -126,6 +129,8 @@
 </template>
 
 <script>
+import {getAuth} from "firebase/auth";
+
 export default {
   name: "MoviePage",
   components: "",
@@ -141,6 +146,9 @@ export default {
 
   }),
   computed: {
+    isFav(){
+      return this.$store.state.isFavourite
+    },
     movie(){
       return this.$store.state.movieDetails
     },
@@ -148,8 +156,11 @@ export default {
       return this.$store.state.trendingList.slice(10, 12)
     }
   },
-  mounted() {
-    this.$store.dispatch("getMovieDetails", {movieId: this.movieId});
+  async mounted() {
+    let VueInstance = this
+    await this.$store.dispatch("getMovieDetails", {movieId: VueInstance.movieId});
+    await this.$store.dispatch("inFavourite", {userId: VueInstance.getUserLoggedIn(),movieId: VueInstance.movieId})
+
 
     this.interval = setInterval(() => {
 
@@ -158,6 +169,23 @@ export default {
       }
     }, 1000)
   },
+  methods:{
+    getUserLoggedIn(){
+      let auth = getAuth();
+      let currentUser = auth.currentUser.uid
+      return currentUser
+    },
+    addFav(){
+      this.$store.state.isFavourite = true
+      let VueInstance = this
+      this.$store.dispatch("addFavourite",{userId: this.getUserLoggedIn(),movieId: VueInstance.movieId})
+    },
+    removeFav(){
+      this.$store.state.isFavourite = false
+      console.log(this.isFav)
+      this.$store.dispatch("deleteFavourite",{userId: this.getUserLoggedIn(),movieId: this.movieId})
+    }
+  }
 }
 </script>
 
@@ -224,6 +252,11 @@ div {
     width: 150pt;
     height: 250pt;
   }
+}
+.icon_movie{
+  width: 30px;
+  height: auto;
+  margin-left: 10px;
 }
 
 </style>

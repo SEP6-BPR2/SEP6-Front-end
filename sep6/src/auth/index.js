@@ -22,7 +22,7 @@
 
     function googleAuth () {
         return {
-            load: function () {
+            load: async function () {
                 return new Promise(function (resolve) {
                     if (window.gapi === undefined) {
                         installClient().then(function () {
@@ -50,7 +50,7 @@
                         errorCallback(error)
                     })
                 } else {
-                    window.gapi.auth2.getAuthInstance().grantOfflineAccess({'redirect_uri': 'postmessage'}).then(function (response) {
+                     window.gapi.auth2.getAuthInstance().grantOfflineAccess({'redirect_uri': 'postmessage'}).then(function (response) {
                         successCallback(response.code)
                     }, function (error) {
                         errorCallback(error)
@@ -97,11 +97,19 @@
     }
 
     function initClient () {
-        return new Promise(function (resolve) {
-            window.gapi.load('auth2', function () {
-                window.gapi.auth2.init(config)
-                resolve()
-            })
+        return new Promise(function (resolve,reject) {
+                window.gapi.load('auth2', async () => {
+                    try {
+                        setTimeout(function(){
+                            window.gapi.client.init(config);
+                        }, 2000)
+                        resolve();
+                    } catch (gapiErrorResponse) {
+                        let errorMessage = gapiErrorResponse.error.message;
+                        console.log(errorMessage)
+                        reject({ error: errorMessage});
+                    }
+                })
         })
     }
 
