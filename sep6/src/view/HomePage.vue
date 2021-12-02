@@ -11,14 +11,14 @@
         </div>
       </Slide>
     </carousel>
-    <MovieList :showSort="false" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
+    <MovieList :movieList="movieList" v-on:load-more="loadMoreMovies"/>
   </div>
 
 </template>
 
 <script>
 
-import MovieList from "@/view/MovieList";
+import MovieList from "@/components/MovieList";
 import {Carousel, Slide} from 'vue-carousel';
 
 
