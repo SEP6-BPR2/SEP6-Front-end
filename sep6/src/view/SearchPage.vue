@@ -1,12 +1,11 @@
 <template>
   <div>
-    <div>{{ "A" + doo }}</div>
-    <MovieList class="list_movies" :show-sort="true" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
+    <MovieList class="list_movies" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
   </div>
 </template>
 
 <script>
-import MovieList from "./MovieList";
+import MovieList from "../components/MovieList";
 
 export default {
   name: "SearchPage",
@@ -16,10 +15,6 @@ export default {
       type: String,
       default: "",
     },
-    genre: {
-      type: String,
-      default: "any"
-    }
   },
   watch: {
     doo: () => {
@@ -31,13 +26,13 @@ export default {
       return this.$store.state.searchResultList
     }
   },
-  created() {
+  mounted() {
     this.loadMoreMovies()
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getSearchResultList", {searchInput: this.doo, genre: this.genre})
-    }
+      this.$store.dispatch("getSearchResultList", {searchInput: this.doo})
+    },
   }
 }
 </script>

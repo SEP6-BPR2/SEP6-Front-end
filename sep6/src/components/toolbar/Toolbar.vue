@@ -26,16 +26,7 @@
           </v-btn>
         </router-link>
       </div>
-      <v-select
-          v-on:change="reloadList"
-          v-model="chosenGenre"
-          hide-details
-          class="toolbar-left-item"
-          :items="genres"
-          label="Genre"
-          dense
-          outlined
-      ></v-select>
+        <button v-on:click="moveToExplore" >Explore</button>
     </div>
 
   </v-toolbar>
@@ -50,26 +41,16 @@ export default {
     ToolbarMenu,
   },
   computed: {
-
-    genres() {
-      let newlist = this.$store.state.allGenres.map(genreObj => genreObj.genreName).filter(name => name !== "N/A")
-      newlist.push("any")
-      return newlist
-    }
   },
-
   data: () => ({
     searchInput: "",
-    chosenGenre: "any",
     loggedIn: false,
-    genresList: []
   }),
   mounted() {
-    this.$store.dispatch("getAllGenres")
   },
   methods: {
-    reloadList() {
-      this.$router.push({name: 'results', query: {genre: this.chosenGenre}})
+    moveToExplore(){
+      this.$router.push("/explore")
     }
   }
 }

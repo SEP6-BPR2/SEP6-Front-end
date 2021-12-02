@@ -33,8 +33,8 @@ const actions = {
         movieListOffset+=moviesToDisplayPerPage
     },
 
-    getSearchResultList({commit},{searchInput, genre}) {
-        let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/${genre}/1/${searchInput}`
+    getSearchResultList({commit},{searchInput}) {
+        let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/any/1/${searchInput}`
         axios.get(url)
             .then(response => {
                 commit('SET_SEARCH_RESULT_LIST', response.data)
@@ -69,6 +69,9 @@ const actions = {
                 commit('SET_MOVIE_INFO', response.data)
             })
 
+    },
+    clearExploreMovieList({commit}){
+        commit("clearExploreMovieList")
     }
 }
 
@@ -90,6 +93,10 @@ const mutations = {
     },
     SET_MOVIE_INFO(state, movie) {
         state.movie = movie.result
+    },
+    clearExploreMovieList(state) {
+        state.movieList = []
+        movieListOffset = 0
     }
 }
 
