@@ -2,31 +2,27 @@
   <v-toolbar dark>
 
     <div class="toolbar-left col-md-6 col-12">
-      <router-link :to=" '/'">
-        <v-toolbar-title class="toolbar-left-item">
+        <button class="toolbar-left-item" v-on:click="moveToHome">
           SUPER PROJECT
-        </v-toolbar-title>
-      </router-link>
+        </button>
 
       <ToolbarMenu class="toolbar-left-item" :logged-in="loggedIn"></ToolbarMenu>
 
     </div>
 
     <div class="toolbar-right col-md-6 col-12">
-      <div class="search">
+      <div id="search_field">
         <v-text-field
             label="Search"
             v-model="searchInput"
             hide-details="auto"
         ></v-text-field>
 
-        <router-link :to=" {name:'results',query:{doo:searchInput}}">
-          <v-btn icon>
+        <v-btn icon v-on:click="moveToSearch" id="search_button">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
-        </router-link>
       </div>
-        <button v-on:click="moveToExplore" >Explore</button>
+        <v-btn v-on:click="moveToExplore" >Explore</v-btn>
     </div>
 
   </v-toolbar>
@@ -47,10 +43,32 @@ export default {
     loggedIn: false,
   }),
   mounted() {
+    document.getElementById("search_field")
+        .addEventListener("keyup", event => {
+          event.preventDefault();
+          if (event.key === "Enter") {
+            document.getElementById("search_button").click();
+          }
+        });
   },
   methods: {
+    moveToHome(){
+      this.$router.push("/").catch(err => {this.checkIfTheSamePage(err)})
+    },
+    moveToSearch(){
+      this.$router.push({name: 'results',query: {doo: this.searchInput}})
+          .catch(err => {this.checkIfTheSamePage(err)})
+    },
     moveToExplore(){
-      this.$router.push("/explore")
+      this.$router.push("/explore").catch( err => {this.checkIfTheSamePage(err)})
+    },
+    checkIfTheSamePage(error){
+      if (
+          error.name !== 'NavigationDuplicated' &&
+          !error.message.includes('Avoided redundant navigation to current location')
+      ){
+        throw error;
+      }
     }
   }
 }
@@ -67,10 +85,7 @@ export default {
 }
 
 .v-toolbar__title {
-  background-color: #1976d2;
   color: white;
-  border-radius: 4px;
-  padding: 3px;
 }
 
 .v-input {
@@ -91,7 +106,7 @@ export default {
   margin: 5pt;
 }
 
-.search {
+#search_field {
   display: flex;
   flex-grow: 5;
 }
