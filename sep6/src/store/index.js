@@ -20,7 +20,8 @@ const state = {
     searchResultList: [],
     movieDetails: {},
     trendingList: [],
-    movie: {}
+    movie: {},
+    favouriteList:[],
 }
 
 const actions = {
@@ -42,8 +43,8 @@ const actions = {
         searchResultListOffset+=moviesToDisplayPerPage
     },
 
-    getMovieDetails({commit},{movieId}) {
-        axios.get(`${backendUrl}/movies/details/${movieId}`)
+    getMovieDetails({commit},{userId,movieId}) {
+        axios.get(`${backendUrl}/movies/details/${movieId}/1/${userId}`)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
             })
@@ -75,7 +76,37 @@ const actions = {
     },
     clearSearchMovieList({commit}){
         commit("clearSearchMovieList")
-    }
+    },
+    //Favourites------------------------------------------------
+    registerUser({commit},{userId,username}) {
+        let url = `${backendUrl}/users/register/${userId}/${username}`
+        axios.post(url)
+            .then(response => {
+                commit('',response.data)
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+    },
+    getFavourites({commit},{userId}) {
+        axios.get(`${backendUrl}/favorites/${userId}`)
+            .then(response => {
+                commit('SET_FAVOURITE_LIST', response.data)
+            })
+    },
+    addFavourite({commit},{userId, movieId}) {
+        let url =`${backendUrl}/favorites/${userId}/${movieId}`
+        axios.post(url)
+            .then(response => {
+                commit('ADD_FAVOURITE_LIST', response.data,movieId)
+            })
+    },
+    deleteFavourite({commit},{userId, movieId}) {
+        axios.delete(`${backendUrl}/favorites/${userId}/${movieId}`)
+            .then(response => {
+                commit('DELETE_FAVOURITE_LIST', response.data, movieId)
+            })
+    },
 }
 
 const mutations = {
@@ -104,6 +135,20 @@ const mutations = {
     clearSearchMovieList(state) {
         state.searchResultList = []
         searchResultListOffset = 0
+    },
+    //Favourites------------------------------------
+    SET_FAVOURITE_LIST(state,favouriteList){
+        state.favouriteList = favouriteList
+    },
+    ADD_FAVOURITE_LIST(state,status,movieId){
+        if(status == "200"){
+            state.favouriteList.push(movieId)
+        }
+    },
+    DELETE_FAVOURITE_LIST(state,status,movieId){
+        if(status == "200") {
+            state.favouriteList = state.favouriteList.filter(id => id != movieId)
+        }
     }
 }
 

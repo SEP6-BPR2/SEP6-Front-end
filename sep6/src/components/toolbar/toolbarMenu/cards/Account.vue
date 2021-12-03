@@ -39,7 +39,9 @@
             <v-icon>mdi-heart</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title >Favourites</v-list-item-title>
+            <router-link :to=" '/favourites'">
+            <v-list-item-title>Favourites</v-list-item-title>
+            </router-link>
           </v-list-item-content>
         </v-list-item>
 
@@ -60,7 +62,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { getAuth, signOut } from "firebase/auth";
+
 
 export default {
   name: "Account",
@@ -75,25 +78,15 @@ export default {
     ],
   }),
   methods:{
-    async logOut(){
-      let VueInstance = this
-
-      if(this.media=='Facebook')
-      {
-       await window.FB.logout(function() {
+     logOut() {
+       let VueInstance = this
+       const auth = getAuth();
+       signOut(auth).then(() => {
          VueInstance.$emit('logout')
-        });
-      }
-      else {
-       await Vue.googleAuth().signOut(function () {
-          VueInstance.$emit('logout')
-         // things to do when sign-out succeeds
-        }, function () {
-          // things to do when sign-out fails
-        })
-      }
-
-    }
+       }).catch((error) => {
+         console.log(error)
+       });
+     }
   }
 }
 </script>

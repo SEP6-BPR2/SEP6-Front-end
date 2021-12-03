@@ -2,14 +2,14 @@
   <div>
 
     <div class="movie_view row align-md-baseline align-center" ref="movie_list">
-      <v-col class="movie_item col-lg-2 col-md-4 col-12" v-model="movieList"
+      <v-col class="movie_item col-lg-3 col-md-4 col-12" v-model="movieList"
              v-for="(movie, _key)   in movieList" v-on:click="openModal(movie)"  @mouseover="activeOver(_key)" @mouseleave="removeOver(_key)" :key="_key">
         <img id="movie_item_pic"  v-bind:src="`${movie.poster}`">
         <div >
           {{ movie.title }}
         </div>
         <div>
-          {{ "movie.release_date" }}
+          {{ movie.release_date }}
         </div>
         <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
       </v-col>
@@ -84,12 +84,10 @@ export default {
 
 <style scoped>
 .movie_view{
-  margin: 10px;
+  padding: 5px;
 }
 .movie_item{
   position: relative;
-  padding: 10px;
-  margin: 10px;
 }
 
 #movie_item_pic{

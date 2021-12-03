@@ -1,8 +1,5 @@
 <template>
   <div class="text-center">
-    <!--        v-model="menu"-->
-    <!--        I comment out these things so they don't log in console-->
-
     <v-menu
         :close-on-content-click="false"
         :nudge-width="200"
@@ -10,19 +7,16 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-            icon
             color="indigo"
             dark
             v-bind="attrs"
             v-on="on">
-          <v-icon>mdi-dots-vertical</v-icon>
+          {{buttonLabel}}
         </v-btn>
       </template>
 
-      <!--      IF -->
-      <Account v-if="loggedIn==true" v-on:logout="changeLogOut" :id="id" :name="name" :img="picture" :media="media"></Account>
-      <!--      ELSE -->
-      <SingIn v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SingIn>
+      <Account v-if="loggedIn==true" v-on:logout="changeLogOut" :id="id" :name="name" :img="picture"></Account>
+      <SingIn ref="signIn" v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SingIn>
     </v-menu>
   </div>
 </template>
@@ -30,12 +24,18 @@
 <script>
 import SingIn from "@/components/toolbar/toolbarMenu/cards/SingIn";
 import Account from "@/components/toolbar/toolbarMenu/cards/Account";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "ToolbarMenu",
   components: {
+    SingIn,
     Account,
-    SingIn
+  },
+  computed:{
+    buttonLabel() {
+      return this.loggedIn ? "Account" : "Sing In"
+    }
   },
   data(){
     return{
@@ -43,7 +43,6 @@ export default {
       id: Number,
       name: String,
       picture:String,
-      media: String,
       shouldCheckOut:false
     }
   },
@@ -52,13 +51,34 @@ export default {
       this.id=response.id
       this.name=response.name
       this.picture=response.picture
-      this.media = response.media
       this.loggedIn=true
     },
     changeLogOut(){
       this.loggedIn= false
       this.shouldCheckOut = true
+    },
+    checkLoggedIn(){
+      let VueInstance = this
+      let auth = getAuth();
+      onAuthStateChanged(auth,(user) => {
+        if(user){
+          user.getIdToken(true).then(()=> {
+            if (user != null) {
+              let response = {
+                id: user.uid,
+                name: user.displayName,
+                picture: user.photoURL,
+              }
+              VueInstance.changeLogIn(response)
+            }
+          })
+        }
+      })
     }
+
+  },
+  mounted() {
+    this.checkLoggedIn()
   }
 }
 </script>

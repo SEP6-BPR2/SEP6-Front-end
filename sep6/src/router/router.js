@@ -4,6 +4,7 @@ import SearchPage from "../view/SearchPage";
 import Account from "../components/toolbar/toolbarMenu/cards/Account";
 import HomePage from "@/view/HomePage";
 import ExplorePage from "@/view/ExplorePage";
+import FavouritesPage from "../view/FavouritesPage";
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,11 @@ export default new VueRouter({
             path: "/",
             name: "homePage",
             component: HomePage
+        },
+        {
+            path:"/favourites",
+            name:"favourites",
+            component:FavouritesPage
         },
         {
             path: "/results",
