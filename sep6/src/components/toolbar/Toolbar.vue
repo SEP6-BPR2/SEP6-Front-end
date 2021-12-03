@@ -1,41 +1,28 @@
 <template>
   <v-toolbar dark>
 
-    <div class="toolbar-left col-md-6 col-12">
-      <router-link :to=" '/'">
-        <v-toolbar-title class="toolbar-left-item">
+    <div class="toolbar-left">
+        <button class="toolbar-left-item" v-on:click="moveToHome">
           SUPER PROJECT
-        </v-toolbar-title>
-      </router-link>
+        </button>
 
       <ToolbarMenu class="toolbar-left-item" :logged-in="loggedIn"></ToolbarMenu>
 
     </div>
 
-    <div class="toolbar-right col-md-6 col-12">
-      <div class="search">
+    <div class="toolbar-right">
+      <div id="search_field">
         <v-text-field
             label="Search"
             v-model="searchInput"
             hide-details="auto"
         ></v-text-field>
 
-        <router-link :to=" {name:'results',query:{doo:searchInput}}">
-          <v-btn icon>
+        <v-btn icon v-on:click="moveToSearch" id="search_button">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
-        </router-link>
       </div>
-      <v-select
-          v-on:change="reloadList"
-          v-model="chosenGenre"
-          hide-details
-          class="toolbar-left-item"
-          :items="genres"
-          label="Genre"
-          dense
-          outlined
-      ></v-select>
+        <v-btn v-on:click="moveToExplore" >Explore</v-btn>
     </div>
 
   </v-toolbar>
@@ -50,26 +37,38 @@ export default {
     ToolbarMenu,
   },
   computed: {
-
-    genres() {
-      let newlist = this.$store.state.allGenres.map(genreObj => genreObj.genreName).filter(name => name !== "N/A")
-      newlist.push("any")
-      return newlist
-    }
   },
-
   data: () => ({
     searchInput: "",
-    chosenGenre: "any",
     loggedIn: false,
-    genresList: []
   }),
   mounted() {
-    this.$store.dispatch("getAllGenres")
+    document.getElementById("search_field")
+        .addEventListener("keyup", event => {
+          event.preventDefault();
+          if (event.key === "Enter") {
+            document.getElementById("search_button").click();
+          }
+        });
   },
   methods: {
-    reloadList() {
-      this.$router.push({name: 'results', query: {genre: this.chosenGenre}})
+    moveToHome(){
+      this.$router.push("/").catch(err => {this.checkIfTheSamePage(err)})
+    },
+    moveToSearch(){
+      this.$router.push({name: 'results',query: {doo: this.searchInput}})
+          .catch(err => {this.checkIfTheSamePage(err)})
+    },
+    moveToExplore(){
+      this.$router.push("/explore").catch( err => {this.checkIfTheSamePage(err)})
+    },
+    checkIfTheSamePage(error){
+      if (
+          error.name !== 'NavigationDuplicated' &&
+          !error.message.includes('Avoided redundant navigation to current location')
+      ){
+        throw error;
+      }
     }
   }
 }
@@ -86,10 +85,7 @@ export default {
 }
 
 .v-toolbar__title {
-  background-color: #1976d2;
   color: white;
-  border-radius: 4px;
-  padding: 3px;
 }
 
 .v-input {
@@ -99,18 +95,20 @@ export default {
 .toolbar-left {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .toolbar-right {
   display: flex;
   margin-top: 10pt;
+  width: 100%;
 }
 
 .toolbar-left-item {
   margin: 5pt;
 }
 
-.search {
+#search_field {
   display: flex;
   flex-grow: 5;
 }
@@ -125,7 +123,7 @@ a {
   }
 
   .v-toolbar {
-    height: 105pt !important;
+    height: 80pt !important;
   }
 
   .toolbar-left {

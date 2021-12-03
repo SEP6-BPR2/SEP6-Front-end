@@ -16,6 +16,7 @@ let searchResultListOffset = 0
 
 const state = {
     allGenres: [],
+    sortOptions: [],
     movieList: [],
     searchResultList: [],
     movieDetails: {},
@@ -26,16 +27,16 @@ const state = {
 
 const actions = {
 
-    getMovieList({commit}, {genre}) {
-        axios.get(`${backendUrl}/movies/list/year/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
+    getMovieList({commit}, {genre, sort}) {
+        axios.get(`${backendUrl}/movies/list/${sort}/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
             .then(response => {
                 commit('SET_MOVIE_LIST', response.data)
             })
         movieListOffset+=moviesToDisplayPerPage
     },
 
-    getSearchResultList({commit},{searchInput, genre}) {
-        let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/${genre}/1/${searchInput}`
+    getSearchResultList({commit},{searchInput}) {
+        let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/any/1/${searchInput}`
         axios.get(url)
             .then(response => {
                 commit('SET_SEARCH_RESULT_LIST', response.data)
@@ -58,13 +59,11 @@ const actions = {
                 commit('SET_All_GENRES', response.data)
             })
     },
-
-    getTrendingList({commit}) {
-        axios.get('https://api.themoviedb.org/3/trending/all/day?api_key=' + APIKEY)
+    getSortingOptions({commit}){
+        axios.get(`${backendUrl}/movies/sorting`)
             .then(response => {
-                commit('SET_TRENDING_LIST', response.data)
+                commit('SET_SORTING_OPTIONS', response.data)
             })
-
     },
     getMovie({commit}) {
         axios.get(`https://api.themoviedb.org/3/movie/576845?api_key=${APIKEY}`)
@@ -73,8 +72,13 @@ const actions = {
             })
 
     },
+    clearExploreMovieList({commit}){
+        commit("clearExploreMovieList")
+    },
+    clearSearchMovieList({commit}){
+        commit("clearSearchMovieList")
+    },
     //Favourites------------------------------------------------
-
     registerUser({commit},{userId,username}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
         axios.post(url)
@@ -85,7 +89,6 @@ const actions = {
                 console.log(error)
             })
     },
-
     getFavourites({commit},{userId}) {
         axios.get(`${backendUrl}/favorites/${userId}`)
             .then(response => {
@@ -108,9 +111,7 @@ const actions = {
 }
 
 const mutations = {
-    SET_All_GENRES(state, genres){
-      state.allGenres = genres
-    },
+
     SET_MOVIE_LIST(state, trendingMovieList) {
         trendingMovieList.forEach(movie =>{state.movieList.push(movie)})
     },
@@ -120,11 +121,22 @@ const mutations = {
     SET_MOVIE_DETAILS(state, movieDetails){
         state.movieDetails = movieDetails
     },
-    SET_TRENDING_LIST(state, trendingList) {
-        state.trendingList = trendingList.results
+    SET_All_GENRES(state, genres){
+        state.allGenres = genres
+    },
+    SET_SORTING_OPTIONS(state, sortOptions){
+        state.sortOptions = sortOptions
     },
     SET_MOVIE_INFO(state, movie) {
         state.movie = movie.result
+    },
+    clearExploreMovieList(state) {
+        state.movieList = []
+        movieListOffset = 0
+    },
+    clearSearchMovieList(state) {
+        state.searchResultList = []
+        searchResultListOffset = 0
     },
     //Favourites------------------------------------
     SET_FAVOURITE_LIST(state,favouriteList){

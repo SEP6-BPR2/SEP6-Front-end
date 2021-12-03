@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MovieList from "./MovieList";
+import MovieList from "@/components/MovieList";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 export default {
   name: "FavouritesPage",
