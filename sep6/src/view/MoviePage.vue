@@ -147,7 +147,7 @@ export default {
   }),
   computed: {
     isFav(){
-      return this.$store.state.isFavourite
+      return this.$store.state.movieDetails.favorites
     },
     movie(){
       return this.$store.state.movieDetails
@@ -158,12 +158,10 @@ export default {
   },
   async mounted() {
     let VueInstance = this
-    await this.$store.dispatch("getMovieDetails", {movieId: VueInstance.movieId});
-    await this.$store.dispatch("inFavourite", {userId: VueInstance.getUserLoggedIn(),movieId: VueInstance.movieId})
+    await this.$store.dispatch("getMovieDetails", {userId: VueInstance.getUserLoggedIn(),movieId: VueInstance.movieId})
 
 
     this.interval = setInterval(() => {
-
       while (this.value !== this.movie.imdbRating * 10) {
         this.value += 1
       }
@@ -176,13 +174,12 @@ export default {
       return currentUser
     },
     addFav(){
-      this.$store.state.isFavourite = true
+      this.$store.state.movieDetails.favorites = true
       let VueInstance = this
       this.$store.dispatch("addFavourite",{userId: this.getUserLoggedIn(),movieId: VueInstance.movieId})
     },
     removeFav(){
-      this.$store.state.isFavourite = false
-      console.log(this.isFav)
+      this.$store.state.movieDetails.favorites = false
       this.$store.dispatch("deleteFavourite",{userId: this.getUserLoggedIn(),movieId: this.movieId})
     }
   }

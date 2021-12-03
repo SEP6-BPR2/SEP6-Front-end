@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
-const backendUrl = "http://localhost:8888"
-// const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
+// const backendUrl = "http://localhost:8888"
+const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 
 const moviesToDisplayPerPage = 20
 
@@ -22,7 +22,6 @@ const state = {
     trendingList: [],
     movie: {},
     favouriteList:[],
-    isFavourite:false
 }
 
 const actions = {
@@ -44,8 +43,8 @@ const actions = {
         searchResultListOffset+=moviesToDisplayPerPage
     },
 
-    getMovieDetails({commit},{movieId}) {
-        axios.get(`${backendUrl}/movies/details/${movieId}`)
+    getMovieDetails({commit},{userId,movieId}) {
+        axios.get(`${backendUrl}/movies/details/${movieId}/1/${userId}`)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
             })
@@ -105,15 +104,6 @@ const actions = {
                 commit('DELETE_FAVOURITE_LIST', response.data, movieId)
             })
     },
-    inFavourite({commit},{userId, movieId}) {
-        let url =`${backendUrl}/favorites/inFavorites/${userId}/${movieId}`
-        console.log(url)
-        axios.get(url)
-            .then(response => {
-                commit('IS_FAVOURITE', response.data)
-            })
-    },
-
 }
 
 const mutations = {
@@ -148,9 +138,6 @@ const mutations = {
         if(status == "200") {
             state.favouriteList = state.favouriteList.filter(id => id != movieId)
         }
-    },
-    IS_FAVOURITE(state,response){
-        state.isFavourite = response.exists
     }
 }
 
