@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MovieList class="list_movies" :show-sort="true" :movieList="movieList" v-on:load-more="loadMoreMovies"/>
+    <MovieList class="list_movies" :movieList="movieList" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   },
   computed:{
     movieList(){
-      return this.$store.state.favouriteList.movies
+      return this.$store.state.favouriteList
     }
   },
   mounted() {

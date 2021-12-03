@@ -1,15 +1,6 @@
 <template>
   <div>
 
-    <div v-if="showSort" class="d-inline-flex">
-      <v-select
-          :items="sortBy"
-          label="Sort By"
-          dense
-          outlined
-      ></v-select>
-    </div>
-
     <div class="movie_view row align-md-baseline align-center" ref="movie_list">
       <v-col class="movie_item col-lg-3 col-md-4 col-12" v-model="movieList"
              v-for="(movie, _key)   in movieList" v-on:click="openModal(movie)" @mouseover="activeOver(_key)"

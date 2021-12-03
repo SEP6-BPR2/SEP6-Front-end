@@ -150,7 +150,6 @@ export default {
   }),
   computed: {
     isFav(){
-      console.log(this.$store.state.movieDetails.favorites + "3333333333333333333")
       return this.$store.state.movieDetails.favorites
     },
     movie(){

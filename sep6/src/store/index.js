@@ -46,7 +46,6 @@ const actions = {
 
     getMovieDetails({commit},{userId,movieId}) {
         let url = `${backendUrl}/movies/details/${movieId}/1/${userId}`
-        console.log(url)
         axios.get(url)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
@@ -140,7 +139,7 @@ const mutations = {
     },
     //Favourites------------------------------------
     SET_FAVOURITE_LIST(state,favouriteList){
-        state.favouriteList = favouriteList
+        state.favouriteList = favouriteList.movies
     },
     ADD_FAVOURITE_LIST(state,status,movieId){
         if(status == "200"){
