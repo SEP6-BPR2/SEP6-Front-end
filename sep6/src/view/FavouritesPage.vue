@@ -14,7 +14,6 @@ export default {
   },
   computed:{
     movieList(){
-      console.log(JSON.stringify(this.$store.state.favouriteList))
       return this.$store.state.favouriteList.movies
     }
   },
@@ -26,7 +25,6 @@ export default {
         user.getIdToken(true).then(() => {
           if (user != null) {
             this.loadMoreMovies(user.uid)
-
           }
         })
       }

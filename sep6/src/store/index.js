@@ -94,7 +94,6 @@ const actions = {
         let url =`${backendUrl}/favorites/${userId}/${movieId}`
         axios.post(url)
             .then(response => {
-                console.log(response.data + "@@@@@@@@@@")
                 commit('ADD_FAVOURITE_LIST', response.data,movieId)
             })
     },
