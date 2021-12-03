@@ -72,6 +72,9 @@ const actions = {
     },
     clearExploreMovieList({commit}){
         commit("clearExploreMovieList")
+    },
+    clearSearchMovieList({commit}){
+        commit("clearSearchMovieList")
     }
 }
 
@@ -97,6 +100,10 @@ const mutations = {
     clearExploreMovieList(state) {
         state.movieList = []
         movieListOffset = 0
+    },
+    clearSearchMovieList(state) {
+        state.searchResultList = []
+        searchResultListOffset = 0
     }
 }
 

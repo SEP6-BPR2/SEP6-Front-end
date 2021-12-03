@@ -17,9 +17,13 @@ export default {
     },
   },
   watch: {
-    doo: () => {
-      location.reload();
-    },
+    doo: {
+      handler: function () {
+        this.$store.dispatch("clearSearchMovieList")
+        this.loadMoreMovies()
+      },
+      deep: true
+    }
   },
   computed: {
     movieList() {
