@@ -16,6 +16,7 @@ let searchResultListOffset = 0
 
 const state = {
     allGenres: [],
+    sortOptions: [],
     movieList: [],
     searchResultList: [],
     movieDetails: {},
@@ -26,8 +27,8 @@ const state = {
 
 const actions = {
 
-    getMovieList({commit}, {genre}) {
-        axios.get(`${backendUrl}/movies/list/year/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
+    getMovieList({commit}, {genre, sort}) {
+        axios.get(`${backendUrl}/movies/list/${sort}/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
             .then(response => {
                 commit('SET_MOVIE_LIST', response.data)
             })
@@ -56,13 +57,11 @@ const actions = {
                 commit('SET_All_GENRES', response.data)
             })
     },
-
-    getTrendingList({commit}) {
-        axios.get('https://api.themoviedb.org/3/trending/all/day?api_key=' + APIKEY)
+    getSortingOptions({commit}){
+        axios.get(`${backendUrl}/movies/sorting`)
             .then(response => {
-                commit('SET_TRENDING_LIST', response.data)
+                commit('SET_SORTING_OPTIONS', response.data)
             })
-
     },
     getMovie({commit}) {
         axios.get(`https://api.themoviedb.org/3/movie/576845?api_key=${APIKEY}`)
@@ -110,9 +109,7 @@ const actions = {
 }
 
 const mutations = {
-    SET_All_GENRES(state, genres){
-      state.allGenres = genres
-    },
+
     SET_MOVIE_LIST(state, trendingMovieList) {
         trendingMovieList.forEach(movie =>{state.movieList.push(movie)})
     },
@@ -122,8 +119,11 @@ const mutations = {
     SET_MOVIE_DETAILS(state, movieDetails){
         state.movieDetails = movieDetails
     },
-    SET_TRENDING_LIST(state, trendingList) {
-        state.trendingList = trendingList.results
+    SET_All_GENRES(state, genres){
+        state.allGenres = genres
+    },
+    SET_SORTING_OPTIONS(state, sortOptions){
+        state.sortOptions = sortOptions
     },
     SET_MOVIE_INFO(state, movie) {
         state.movie = movie.result

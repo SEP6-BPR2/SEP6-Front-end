@@ -1,7 +1,7 @@
 <template>
   <v-toolbar dark>
 
-    <div class="toolbar-left col-md-6 col-12">
+    <div class="toolbar-left">
         <button class="toolbar-left-item" v-on:click="moveToHome">
           SUPER PROJECT
         </button>
@@ -10,7 +10,7 @@
 
     </div>
 
-    <div class="toolbar-right col-md-6 col-12">
+    <div class="toolbar-right">
       <div id="search_field">
         <v-text-field
             label="Search"
@@ -95,11 +95,13 @@ export default {
 .toolbar-left {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .toolbar-right {
   display: flex;
   margin-top: 10pt;
+  width: 100%;
 }
 
 .toolbar-left-item {
@@ -121,7 +123,7 @@ a {
   }
 
   .v-toolbar {
-    height: 105pt !important;
+    height: 80pt !important;
   }
 
   .toolbar-left {

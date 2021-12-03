@@ -13,7 +13,8 @@
           outlined
       ></v-select>
       <v-select
-          :items="[]"
+          v-model="chosenSort"
+          :items="sortOptions"
           label="Sort By"
           dense
           outlined
@@ -37,27 +38,41 @@ export default {
       let newlist = this.$store.state.allGenres.map(genreObj => genreObj.genreName).filter(name => name !== "N/A")
       newlist.push("any")
       return newlist
+    },
+    sortOptions(){
+      return this.$store.state.sortOptions.map(sortObj => sortObj.collumns)
     }
   },
   data: () => ({
     chosenGenre: "any",
+    chosenSort: "year"
   }),
   watch: {
     chosenGenre: {
       handler: function() {
-        this.$store.dispatch("clearExploreMovieList")
-        this.loadMoreMovies()
+        this.reload()
+      },
+      deep: true
+    },
+    chosenSort: {
+      handler: function(){
+        this.reload()
       },
       deep: true
     }
   },
   mounted() {
     this.$store.dispatch("getAllGenres")
+    this.$store.dispatch("getSortingOptions")
     this.loadMoreMovies()
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: this.chosenGenre})
+      this.$store.dispatch("getMovieList", {genre: this.chosenGenre, sort: this.chosenSort})
+    },
+    reload(){
+      this.$store.dispatch("clearExploreMovieList")
+      this.loadMoreMovies()
     }
   }
 }
