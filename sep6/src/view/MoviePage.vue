@@ -125,17 +125,20 @@
     </v-col>
 
   </v-card>
-
 </template>
 
 <script>
-import {getAuth} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "MoviePage",
   components: "",
   props: {
-    movieId: null
+    movieId: null,
+    searchQuery: {
+      type: String,
+      default: ""
+    },
   },
   data: () => ({
     interval: {},
@@ -147,6 +150,7 @@ export default {
   }),
   computed: {
     isFav(){
+      console.log(this.$store.state.movieDetails.favorites + "3333333333333333333")
       return this.$store.state.movieDetails.favorites
     },
     movie(){
@@ -157,9 +161,13 @@ export default {
     }
   },
   async mounted() {
-    let VueInstance = this
-    await this.$store.dispatch("getMovieDetails", {userId: VueInstance.getUserLoggedIn(),movieId: VueInstance.movieId})
-
+    // let VueInstance = this
+    let auth = getAuth();
+    await onAuthStateChanged(auth,(user) => {
+      if(user){
+         this.$store.dispatch("getMovieDetails", {userId: user.uid,movieId: parseInt(this.searchQuery)})
+      }
+    })
 
     this.interval = setInterval(() => {
       while (this.value !== this.movie.imdbRating * 10) {
@@ -170,17 +178,29 @@ export default {
   methods:{
     getUserLoggedIn(){
       let auth = getAuth();
-      let currentUser = auth.currentUser.uid
+      let currentUser
+      onAuthStateChanged(auth,(user) => {
+        if(user){
+          currentUser =user.uid
+        }
+      })
       return currentUser
     },
     addFav(){
-      this.$store.state.movieDetails.favorites = true
-      let VueInstance = this
-      this.$store.dispatch("addFavourite",{userId: this.getUserLoggedIn(),movieId: VueInstance.movieId})
+      this.performAction(true,"addFavourite")
     },
     removeFav(){
-      this.$store.state.movieDetails.favorites = false
-      this.$store.dispatch("deleteFavourite",{userId: this.getUserLoggedIn(),movieId: this.movieId})
+      this.performAction(false,"deleteFavourite")
+    },
+    performAction(bool,Action){
+      // let VueInstance = this
+      let auth = getAuth();
+      onAuthStateChanged(auth,(user) => {
+        if(user){
+          this.$store.state.movieDetails.favorites = bool
+          this.$store.dispatch(Action,{userId: user.uid,movieId: parseInt(this.searchQuery)})
+        }
+      })
     }
   }
 }

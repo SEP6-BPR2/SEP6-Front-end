@@ -4,6 +4,7 @@ import SearchPage from "../view/SearchPage";
 import Account from "../components/toolbar/toolbarMenu/cards/Account";
 import HomePage from "@/view/HomePage";
 import FavouritesPage from "../view/FavouritesPage";
+import MoviePage from "../view/MoviePage";
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,12 @@ export default new VueRouter({
             path:"/favourites",
             name:"favourites",
             component:FavouritesPage
+        },
+        {
+            path:"/moviePage",
+            name: "moviePage",
+            component: MoviePage,
+            props: (route)=>({searchQuery: route.query.searchQuery})
         },
         {
             path: "/results",

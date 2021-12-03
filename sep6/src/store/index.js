@@ -44,7 +44,9 @@ const actions = {
     },
 
     getMovieDetails({commit},{userId,movieId}) {
-        axios.get(`${backendUrl}/movies/details/${movieId}/1/${userId}`)
+        let url = `${backendUrl}/movies/details/${movieId}/1/${userId}`
+        console.log(url)
+        axios.get(url)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
             })
