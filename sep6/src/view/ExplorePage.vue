@@ -40,7 +40,10 @@ export default {
       return newlist
     },
     sortOptions(){
-      return this.$store.state.sortOptions.map(sortObj => sortObj.collumns)
+      let illegalSorting = ["description", "id", "latUpdated", "posterURL"]
+      return this.$store.state.sortOptions
+          .map(sortObj => sortObj.collumns)
+          .filter(name => !illegalSorting.includes(name))
     }
   },
   data: () => ({
