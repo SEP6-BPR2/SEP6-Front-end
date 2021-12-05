@@ -35,12 +35,12 @@ export default {
       return this.$store.state.movieList
     },
     genres() {
-      let newlist = this.$store.state.allGenres.map(genreObj => genreObj.genreName).filter(name => name !== "N/A")
-      newlist.push("any")
-      return newlist
+      console.log(this.$store.state.allGenres)
+      return this.$store.state.allGenres
+
     },
     sortOptions(){
-      return this.$store.state.sortOptions.map(sortObj => sortObj.collumns)
+      return this.$store.state.sortOptions
     }
   },
   data: () => ({
