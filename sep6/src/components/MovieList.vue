@@ -7,7 +7,7 @@
              @mouseleave="removeOver(_key)" :key="_key">
         <router-link :to=" {name:'moviePage',query:{searchQuery: movie.id.toString() }}">
 
-          <img id="movie_item_pic" v-bind:src="`${movie.poster}`">
+          <img id="movie_item_pic" v-bind:src="`${movie.posterURL}`">
           <div>
             {{ movie.title }}
           </div>
