@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: "any", sort: "year"})
+      this.$store.dispatch("getMovieList", {genre: "any", sort: "year", order: 1})
     }
   }
 

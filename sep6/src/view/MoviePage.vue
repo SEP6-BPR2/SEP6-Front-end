@@ -171,8 +171,6 @@ export default {
     this.$store.dispatch("getMovieDetails", {userId: this.user.uid,movieId: parseInt(this.searchQuery)})
 
     if(this.movie.rating!==null && this.movie.rating!=="N/A" && this.movie.rating!==undefined) {
-      console.log("!!!!!!!!!!!!!!interval")
-      console.log(this.movie.rating)
       this.interval = setInterval(() => {
 
         while (this.value !== this.movie.rating * 10) {

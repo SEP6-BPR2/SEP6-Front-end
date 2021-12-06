@@ -27,8 +27,8 @@ const state = {
 
 const actions = {
 
-    getMovieList({commit}, {genre, sort}) {
-        axios.get(`${backendUrl}/movies/list/${sort}/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/1`)
+    getMovieList({commit}, {genre, sort, order}) {
+        axios.get(`${backendUrl}/movies/list/${sort}/${moviesToDisplayPerPage}/${movieListOffset}/${genre}/${order}`)
             .then(response => {
                 commit('SET_MOVIE_LIST', response.data)
             })

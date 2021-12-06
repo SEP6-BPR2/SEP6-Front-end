@@ -27,7 +27,6 @@ export default {
   },
   computed: {
     movieList() {
-      console.log(this.$store.state.searchResultList)
       return this.$store.state.searchResultList
     }
   },

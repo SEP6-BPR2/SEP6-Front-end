@@ -19,6 +19,13 @@
           dense
           outlined
       ></v-select>
+      <v-select
+          v-model="chosenOrder"
+          :items="orders"
+          label="Order"
+          dense
+          outlined
+      ></v-select>
     </div>
     <MovieList :movieList="movieList" v-on:load-more="loadMoreMovies"/>
   </div>
@@ -35,31 +42,39 @@ export default {
       return this.$store.state.movieList
     },
     genres() {
-      console.log(this.$store.state.allGenres)
       return this.$store.state.allGenres
 
     },
-    sortOptions(){
+    sortOptions() {
       return this.$store.state.sortOptions
     }
   },
   data: () => ({
     chosenGenre: "any",
-    chosenSort: "year"
+    chosenSort: "year",
+    orders: ["ASC", "DESC"],
+    chosenOrder: 1
   }),
   watch: {
     chosenGenre: {
-      handler: function() {
+      handler: function () {
         this.reload()
       },
       deep: true
     },
     chosenSort: {
-      handler: function(){
+      handler: function () {
         this.reload()
       },
       deep: true
+    },
+    chosenOrder: {
+      handler: function () {
+        this.chosenOrder === "DESC" ? this.chosenOrder = 1 : this.chosenOrder = 0
+        this.reload()
+      }
     }
+
   },
   mounted() {
     this.$store.dispatch("getAllGenres")
@@ -68,9 +83,9 @@ export default {
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: this.chosenGenre, sort: this.chosenSort})
+      this.$store.dispatch("getMovieList", {genre: this.chosenGenre, sort: this.chosenSort, order: this.chosenOrder})
     },
-    reload(){
+    reload() {
       this.$store.dispatch("clearExploreMovieList")
       this.loadMoreMovies()
     }
@@ -82,7 +97,8 @@ export default {
 .list_movies {
   margin-top: 200px;
 }
-.sorting{
+
+.sorting {
   display: inline-flex;
   justify-content: space-between;
 }
