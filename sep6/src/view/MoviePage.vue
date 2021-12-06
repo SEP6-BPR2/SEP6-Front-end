@@ -41,7 +41,7 @@
                 :width="4"
                 color="yellow"
                 :value="value"
-            >{{ movie.imdbRating / 2 }} / 5
+            >{{ movie.rating / 2 }} / 5
             </v-progress-circular>
             <label>Average of votes</label>
 
@@ -52,7 +52,7 @@
                 :size="100"
                 :width="4"
                 :value="0"
-            >{{ movie.imdbVotes }}</v-progress-circular>
+            >{{ movie.votes }}</v-progress-circular>
             <label>Number of votes</label>
           </div>
         </div>
@@ -62,7 +62,7 @@
 
 
         <div class="row text-justify movie-description">
-          {{ movie.overview }}
+          {{ movie.description }}
         </div>
       </div>
 
@@ -169,7 +169,7 @@ export default {
     })
 
     this.interval = setInterval(() => {
-      while (this.value !== this.movie.imdbRating * 10) {
+      while (this.value !== this.movie.rating * 10) {
         this.value += 1
       }
     }, 1000)

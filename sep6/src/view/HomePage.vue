@@ -38,11 +38,11 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("getMovieList", {genre: "any"})
+    this.loadMoreMovies()
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: "any"})
+      this.$store.dispatch("getMovieList", {genre: "any", sort: "year"})
     }
   }
 
