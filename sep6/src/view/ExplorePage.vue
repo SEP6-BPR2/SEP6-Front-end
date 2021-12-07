@@ -28,15 +28,19 @@
       ></v-select>
     </div>
     <MovieList :movieList="movieList" v-on:load-more="loadMoreMovies"/>
+    <div id="loading_circle" v-if="loading">
+      <ProgressCircular></ProgressCircular>
+    </div>
   </div>
 </template>
 
 <script>
 import MovieList from "../components/MovieList";
+import ProgressCircular from "@/components/ProgressCircular";
 
 export default {
   name: "ExplorePage",
-  components: {MovieList},
+  components: {MovieList, ProgressCircular},
   computed: {
     movieList() {
       return this.$store.state.movieList
@@ -53,7 +57,8 @@ export default {
     chosenGenre: "any",
     chosenSort: "year",
     orders: ["ASC", "DESC"],
-    chosenOrder: 1
+    chosenOrder: 1,
+    loading: false
   }),
   watch: {
     chosenGenre: {
@@ -82,8 +87,10 @@ export default {
     this.loadMoreMovies()
   },
   methods: {
-    loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: this.chosenGenre, sort: this.chosenSort, order: this.chosenOrder})
+    async loadMoreMovies() {
+      this.loading = true
+      await this.$store.dispatch("getMovieList", {genre: this.chosenGenre, sort: this.chosenSort, order: this.chosenOrder})
+      this.loading = false
     },
     reload() {
       this.$store.dispatch("clearExploreMovieList")
@@ -102,4 +109,9 @@ export default {
   display: inline-flex;
   justify-content: space-between;
 }
+
+#loading_circle {
+  width: 100%;
+}
+
 </style>

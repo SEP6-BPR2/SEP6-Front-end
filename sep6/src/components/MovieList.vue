@@ -8,13 +8,13 @@
         <div class="img_container">
           <img id="movie_item_pic" v-bind:src="`${movie.posterURL}`">
         </div>
-          <div>
-            {{ movie.title }}
-          </div>
-          <div>
-            {{ movie.year }}
-          </div>
-          <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
+        <div>
+          {{ movie.title }}
+        </div>
+        <div>
+          {{ movie.year }}
+        </div>
+        <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
       </v-col>
     </div>
 
@@ -39,9 +39,7 @@ export default {
   mounted() {
     window.onscroll = () => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        // this.loadMoreMovies()
         this.$emit("load-more")
-        //trigger to home page
       }
     };
   },
@@ -57,8 +55,8 @@ export default {
       this.isShow = true
       this.currentMovie = movie
     },
-    moveToMovie(movie){
-      this.$router.push({name:'moviePage',query:{searchQuery: movie.id.toString() }})
+    moveToMovie(movie) {
+      this.$router.push({name: 'moviePage', query: {searchQuery: movie.id.toString()}})
     }
   }
 
@@ -88,7 +86,7 @@ export default {
   position: relative;
 }
 
-.img_container{
+.img_container {
   height: 200pt;
   width: 135pt;
   display: inline-grid;
@@ -119,8 +117,9 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 @media all and (max-width: 479px) {
-  .img_container{
+  .img_container {
     height: 95%;
     width: 95%;
   }
