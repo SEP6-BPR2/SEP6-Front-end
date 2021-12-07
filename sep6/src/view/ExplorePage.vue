@@ -3,6 +3,7 @@
 
   <div class="list_movies">
     <div class="sorting">
+      <v-spacer/>
       <v-select
           v-model="chosenGenre"
           hide-details
@@ -12,6 +13,7 @@
           dense
           outlined
       ></v-select>
+      <v-spacer/>
       <v-select
           v-model="chosenSort"
           :items="sortOptions"
@@ -19,6 +21,7 @@
           dense
           outlined
       ></v-select>
+      <v-spacer/>
       <v-select
           v-model="chosenOrder"
           :items="orders"
@@ -26,6 +29,7 @@
           dense
           outlined
       ></v-select>
+      <v-spacer/>
     </div>
     <MovieList :movieList="movieList" v-on:load-more="loadMoreMovies"/>
   </div>
@@ -95,11 +99,20 @@ export default {
 
 <style scoped>
 .list_movies {
-  margin-top: 200px;
+  margin-top: 100pt;
 }
 
 .sorting {
   display: inline-flex;
   justify-content: space-between;
+  width: 100%;
 }
+
+@media all and (max-width: 479px) {
+  .list_movies{
+    margin-top: 100pt;
+  }
+
+}
+
 </style>

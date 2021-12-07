@@ -130,6 +130,10 @@ a {
     justify-content: space-between;
   }
 
+  v-text-field{
+    flex-shrink: 2;
+  }
+
   .toolbar-right {
     margin-top: 0pt;
   }
