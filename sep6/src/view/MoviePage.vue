@@ -4,7 +4,8 @@
         class="row rounded-xl movie-info"
     >
       <div class="col-md-5 col-12">
-        <img class="image" v-bind:src="`${movie.posterURL}`">
+        <img v-if="movie.posterURL !== 'N/A'" class="image" v-bind:src="`${movie.posterURL}`">
+        <img v-else class="default_img image" src="@/assets/no-image.png">
         <div class="">
           <label class="">Popularity: {{ movie.popularity }}</label>
         </div>
@@ -139,6 +140,7 @@ export default {
       type: String,
       default: ""
     },
+    isLoggedIn:Boolean
   },
   data: () => ({
     interval: {},
@@ -146,8 +148,6 @@ export default {
     rating: 4.5,
     expand: false,
     expand2: false,
-    user: {uid: null}
-
   }),
   computed: {
     isFav(){
@@ -161,14 +161,19 @@ export default {
     }
   },
   async mounted() {
-    // let VueInstance = this
     let auth = getAuth();
     await onAuthStateChanged(auth,(user) => {
+      let currentUserId
       if(user){
-        this.user = user
+        this.isLoggedIn = true
+        currentUserId = user.uid
+        this.$store.dispatch("getMovieDetails", {userId: currentUserId, movieId: parseInt(this.searchQuery),num: 1})
+      }
+      else{
+        this.isLoggedIn = false
+        this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery),num: 0})
       }
     })
-    await this.$store.dispatch("getMovieDetails", {userId: this.user.uid, movieId: parseInt(this.searchQuery)})
 
     if(this.movie.rating!==null && this.movie.rating!=="N/A" && this.movie.rating!==undefined) {
       this.interval = setInterval(() => {
@@ -181,21 +186,19 @@ export default {
 
   },
   methods:{
-    getUserLoggedIn(){
-      let auth = getAuth();
-      let currentUser
-      onAuthStateChanged(auth,(user) => {
-        if(user){
-          currentUser =user.uid
-        }
-      })
-      return currentUser
-    },
     addFav(){
-      this.performAction(true,"addFavourite")
+      if(this.isLoggedIn){
+        this.performAction(true,"addFavourite")
+      }
+      else
+        alert("Please log in!")
     },
     removeFav(){
-      this.performAction(false,"deleteFavourite")
+      if(this.isLoggedIn){
+        this.performAction(false,"deleteFavourite")
+      }
+      else
+        alert("Please log in!")
     },
     performAction(bool,Action){
       // let VueInstance = this
@@ -248,6 +251,9 @@ export default {
 .image {
   width: 250pt;
   height: 350pt;
+}
+.default_img{
+  background-color: #ded9d9;
 }
 
 div {

@@ -6,7 +6,8 @@
              v-for="(movie, _key)   in movieList" v-on:click="openModal(movie)" @mouseover="activeOver(_key)"
              @mouseleave="removeOver(_key)" :key="_key" @click="moveToMovie(movie)">
         <div class="img_container">
-          <img id="movie_item_pic" v-bind:src="`${movie.posterURL}`">
+          <img v-if="movie.posterURL !== 'N/A'" class="movie_item_pic" v-bind:src="`${movie.posterURL}`">
+          <img v-else class="default_img movie_item_pic" src="@/assets/no-image.png">
         </div>
           <div>
             {{ movie.title }}
@@ -94,10 +95,15 @@ export default {
   display: inline-grid;
 }
 
-#movie_item_pic {
+.movie_item_pic {
   border-radius: 7px;
   height: inherit;
   width: inherit;
+}
+
+.default_img{
+  background-color: #ded9d9;
+  padding: 5px;
 }
 
 .movie_item:hover {
@@ -126,6 +132,4 @@ export default {
   }
 
 }
-
-
 </style>

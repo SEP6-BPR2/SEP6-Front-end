@@ -19,7 +19,8 @@ export default new VueRouter({
         {
             path:"/favourites",
             name:"favourites",
-            component:FavouritesPage
+            component:FavouritesPage,
+            props:(route)=>({userId: route.query.userId})
         },
         {
             path:"/moviePage",

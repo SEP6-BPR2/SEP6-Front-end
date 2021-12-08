@@ -12,6 +12,9 @@ export default {
   components:{
     MovieList
   },
+  props:{
+    userId: String
+  },
   computed:{
     movieList(){
       return this.$store.state.favouriteList
@@ -19,19 +22,23 @@ export default {
   },
   mounted() {
     let auth = getAuth();
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        user.getIdToken(true).then(() => {
-          if (user != null) {
-            this.loadMoreMovies(user.uid)
-          }
-        })
-      }
-    })
+    if(this.userId){
+      this.loadMovies(this.userId)
+    }
+    else {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          user.getIdToken(true).then(() => {
+            if (user != null) {
+              this.loadMovies(user.uid)
+            }
+          })
+        }
+      })
+    }
   },
   methods:{
-    loadMoreMovies(id) {
+    loadMovies(id) {
       this.$store.dispatch("getFavourites", {userId: id})
     }
   }

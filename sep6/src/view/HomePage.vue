@@ -3,7 +3,9 @@
     <carousel :perPageCustom="[[300,1],[768, 3], [1024, 4]]" :autoplay="true" :mouse-drag="true">
       <Slide v-for="(slide,_key) in slides" :key="_key">
         <div id="imgcontainer">
-          <img id="carousel_img" v-bind:src="`${slide.posterURL}`">
+          <img v-if="slide.posterURL !== 'N/A'" class="carousel_img" v-bind:src="`${slide.posterURL}`">
+          <img v-else class="default_img carousel_img" src="@/assets/no-image.png">
+<!--I think we should instead remove any image without image for the carousel -->
           <div class="overlay2"></div>
           <div class="overlay">
             {{ slide.description }}
@@ -59,12 +61,17 @@ export default {
   opacity: 0.3;
 }
 
-#carousel_img {
+.carousel_img {
   display: block;
   width: 100%;
   height: 550px;
   object-position: top;
   object-fit: cover;
+}
+
+.default_img{
+  background-color: #ded9d9;
+  padding: 10px
 }
 
 #imgcontainer:hover .overlay {

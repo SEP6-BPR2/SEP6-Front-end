@@ -64,7 +64,6 @@
 <script>
 import { getAuth, signOut } from "firebase/auth";
 
-
 export default {
   name: "Account",
   props:['name','img','media'],

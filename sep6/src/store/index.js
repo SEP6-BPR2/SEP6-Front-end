@@ -44,8 +44,9 @@ const actions = {
         searchResultListOffset+=moviesToDisplayPerPage
     },
 
-    getMovieDetails({commit},{userId,movieId}) {
-        let url = `${backendUrl}/movies/details/${movieId}/1/${userId}`
+    getMovieDetails({commit},{userId,movieId,num}) {
+        let url = `${backendUrl}/movies/details/${movieId}/${num}/${userId}`
+        console.log(url)
         axios.get(url)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
@@ -91,7 +92,9 @@ const actions = {
             })
     },
     getFavourites({commit},{userId}) {
-        axios.get(`${backendUrl}/favorites/${userId}`)
+        let url =`${backendUrl}/favorites/${userId}`
+        console.log(url)
+        axios.get(url)
             .then(response => {
                 commit('SET_FAVOURITE_LIST', response.data)
             })
