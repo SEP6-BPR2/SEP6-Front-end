@@ -10,13 +10,12 @@ import { initializeApp } from "firebase/app";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyANqXfuB-god279Li2Ar3wTbGoIjfReVuU",
-  authDomain: "indigo-proxy-332912.firebaseapp.com",
-  projectId: "indigo-proxy-332912",
-  storageBucket: "indigo-proxy-332912.appspot.com",
-  messagingSenderId: "656774347674",
-  appId: "1:656774347674:web:bc3bc78462d410be021823",
-  measurementId: "G-7FQX5G26DW"
+  apiKey: "AIzaSyCKOg9V7JIw3-vxEs2xl4Fqu6htWpKVTr0",
+  authDomain: "sep6project-331917.firebaseapp.com",
+  projectId: "sep6project-331917",
+  storageBucket: "sep6project-331917.appspot.com",
+  messagingSenderId: "542015503636",
+  appId: "1:542015503636:web:a73127dcda0747427dd601"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -3,7 +3,7 @@
     <carousel :perPageCustom="[[300,1],[768, 3], [1024, 4]]" :autoplay="true" :mouse-drag="true">
       <Slide v-for="(slide,_key) in slides" :key="_key">
         <div id="imgcontainer">
-          <img id="carousel_img" v-bind:src="`${slide.poster}`">
+          <img id="carousel_img" v-bind:src="`${slide.posterURL}`">
           <div class="overlay2"></div>
           <div class="overlay">
             {{ slide.description }}

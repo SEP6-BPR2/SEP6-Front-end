@@ -168,7 +168,7 @@ export default {
         this.user = user
       }
     })
-    this.$store.dispatch("getMovieDetails", {userId: this.user.uid,movieId: parseInt(this.searchQuery)})
+    await this.$store.dispatch("getMovieDetails", {userId: this.user.uid, movieId: parseInt(this.searchQuery)})
 
     if(this.movie.rating!==null && this.movie.rating!=="N/A" && this.movie.rating!==undefined) {
       this.interval = setInterval(() => {
@@ -202,8 +202,10 @@ export default {
       let auth = getAuth();
       onAuthStateChanged(auth,(user) => {
         if(user){
-          this.$store.state.movieDetails.favorites = bool
-          this.$store.dispatch(Action,{userId: user.uid,movieId: parseInt(this.searchQuery)})
+          user.getIdToken(true).then((idToken)=>{
+            this.$store.state.movieDetails.favorites = bool
+            this.$store.dispatch(Action,{userId: user.uid,movieId: parseInt(this.searchQuery),token: idToken})
+          })
         }
       })
     }

@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
-// const backendUrl = "http://localhost:8888"
-const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
+const backendUrl = "http://localhost:8888"
+// const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 
 const moviesToDisplayPerPage = 20
 
@@ -78,10 +78,12 @@ const actions = {
         commit("clearSearchMovieList")
     },
     //Favourites------------------------------------------------
-    registerUser({commit},{userId,username}) {
+    registerUser({commit},{userId,username,token}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
-        axios.post(url)
+        console.log(token + "@@@@@")
+        axios.post(url,{},{headers: {authorization:token}})
             .then(response => {
+                console.log(JSON.stringify(response.data) + "#########")
                 commit('',response.data)
             })
             .catch(error =>{
@@ -94,15 +96,15 @@ const actions = {
                 commit('SET_FAVOURITE_LIST', response.data)
             })
     },
-    addFavourite({commit},{userId, movieId}) {
+    addFavourite({commit},{userId, movieId,token}) {
         let url =`${backendUrl}/favorites/${userId}/${movieId}`
-        axios.post(url)
+        axios.post(url,{},{headers: {authorization:token}})
             .then(response => {
                 commit('ADD_FAVOURITE_LIST', response.data,movieId)
             })
     },
-    deleteFavourite({commit},{userId, movieId}) {
-        axios.delete(`${backendUrl}/favorites/${userId}/${movieId}`)
+    deleteFavourite({commit},{userId, movieId,token}) {
+        axios.delete(`${backendUrl}/favorites/${userId}/${movieId}`,{headers: {authorization:token}})
             .then(response => {
                 commit('DELETE_FAVOURITE_LIST', response.data, movieId)
             })

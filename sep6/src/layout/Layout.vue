@@ -16,7 +16,13 @@ export default {
 }
 </script>
 
+<style>
+#app,body,html{
+  background-color: #224747;
+}
+</style>
 <style scoped>
+
 #main_header{
   position:fixed;
   width: 100%;

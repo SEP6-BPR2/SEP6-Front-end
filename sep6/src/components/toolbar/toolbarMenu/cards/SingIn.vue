@@ -69,17 +69,14 @@ export default {
       signInWithPopup(auth,provider)
        .then(()=>{
          let currentUser = auth.currentUser
-
-         console.log(JSON.stringify(currentUser) + "####")
-
-         currentUser.getIdToken(true).then(()=>{
+         currentUser.getIdToken(true).then((idToken)=>{
            let response = {
              id: currentUser.uid,
              name: currentUser.displayName,
              picture:currentUser.photoURL,
            }
            VueInstance.$emit('logIn',response)
-           this.$store.dispatch("registerUser",{userId: response.id,username: response.name})
+           this.$store.dispatch("registerUser",{userId: response.id,username: response.name,token: idToken})
          })
        }).catch((error) => {
         console.log("error " + error)
