@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
-const backendUrl = "http://localhost:8888"
-// const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
+// const backendUrl = "http://localhost:8888"
+const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 
 const moviesToDisplayPerPage = 20
 
