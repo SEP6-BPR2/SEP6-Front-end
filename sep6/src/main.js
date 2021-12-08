@@ -4,7 +4,7 @@ import router from './router/router.js'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEye,faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faEye,faHeart,faClipboard} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { initializeApp } from "firebase/app";
 
@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 Vue.use(app)
-library.add(faEye,faHeart)
+library.add(faEye,faHeart,faClipboard)
 
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

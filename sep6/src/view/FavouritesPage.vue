@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fav_List">
     <MovieList class="list_movies" :movieList="movieList" />
   </div>
 </template>
@@ -46,5 +46,8 @@ export default {
 </script>
 
 <style scoped>
+.fav_List{
+  margin-top:100px;
+}
 
 </style>

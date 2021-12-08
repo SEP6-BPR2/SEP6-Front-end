@@ -93,7 +93,6 @@ const actions = {
     },
     getFavourites({commit},{userId}) {
         let url =`${backendUrl}/favorites/${userId}`
-        console.log(url)
         axios.get(url)
             .then(response => {
                 commit('SET_FAVOURITE_LIST', response.data)

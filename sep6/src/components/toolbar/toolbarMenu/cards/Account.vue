@@ -24,26 +24,22 @@
 
     <v-list>
 
-      <v-list-item>
+      <v-list-item style="cursor: pointer" v-on:click="dialog=true">
         <v-list-item-action>
-          <v-switch
-              color="purple"
-          ></v-switch>
+          <v-icon>mdi-share</v-icon>
         </v-list-item-action>
-        <v-list-item-title>Enable notifications</v-list-item-title>
+        <v-list-item-title>Share</v-list-item-title>
       </v-list-item>
 
-        <v-list-item
-        >
+      <v-list-item v-on:click="routeToFav">
           <v-list-item-icon>
             <v-icon>mdi-heart</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <router-link :to=" '/favourites'">
             <v-list-item-title>Favourites</v-list-item-title>
-            </router-link>
           </v-list-item-content>
         </v-list-item>
+
 
     </v-list>
 
@@ -58,16 +54,36 @@
         Log out
       </v-btn>
     </v-card-actions>
+    <v-dialog
+        v-model="dialog"
+        width="500"
+    >
+
+      <v-card>
+        <v-card-title class="text-h10 grey lighten-2">
+          Please copy link to share with friends
+        </v-card-title>
+
+        <v-card-text>
+          <font-awesome-icon v-on:click="copyToClip" class="col-2 icon_share" icon="clipboard"/>
+          <div id="dial_div" class="col-9">{{shareURL}}
+          </div>
+        </v-card-text>
+
+        <v-divider></v-divider>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import { getAuth, signOut } from "firebase/auth";
+import {getAuth, signOut} from "firebase/auth";
 
 export default {
   name: "Account",
   props:['name','img','media'],
   data: () => ({
+    dialog: false,
     selectedItem: 1,
     // name:'',
     items: [
@@ -76,6 +92,13 @@ export default {
       { text: 'Conversions', icon: 'mdi-flag' },
     ],
   }),
+  computed:{
+    shareURL(){
+      let auth = getAuth()
+      let user = auth.currentUser
+      return 'https://localhost:8080/#/favourites?userId=' + user.uid
+    }
+  },
   methods:{
      logOut() {
        let VueInstance = this
@@ -85,11 +108,36 @@ export default {
        }).catch((error) => {
          console.log(error)
        });
-     }
+     },
+    copyToClip(){
+      let copyText = document.getElementById("dial_div").textContent;
+
+      navigator.clipboard.writeText(copyText)
+      alert("Copied the text: " + copyText);
+    },
+    routeToFav(){
+      this.$router.push({name: 'favourites'})
+    }
   }
 }
 </script>
 
 <style scoped>
+.icon_share{
+  cursor: pointer;
+  width: 45px;
+  height: auto;
+  margin-bottom: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#dial_div{
+  border: 0.5px solid lightgrey;
+  margin-top: 4px;
+  display: inline-block;
+  cursor: text;
+  padding: 2px;
+}
 
 </style>
