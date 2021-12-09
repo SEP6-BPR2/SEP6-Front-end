@@ -1,34 +1,40 @@
 <template>
   <div id="comments_input">
     <v-list-item-avatar>
-      <img
-          v-bind:src="userAvatar"
-      >
+      <img v-if="user !== null" v-bind:src="user.photoURL" >
+      <img v-else src="@/assets/avatar.png">
     </v-list-item-avatar>
     <v-text-field v-model="commentsInput" label="Comment" color="black"></v-text-field>
     <v-btn icon v-on:click="sendComment" id="send_button">
-      <v-icon>mdi-magnify</v-icon>
+      <v-icon>mdi-send</v-icon>
     </v-btn>
   </div>
 </template>
 
 <script>
-import {getAuth} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "CommentsInput",
   props: {
   },
   data: () => ({
-    commentsInput: ""
+    commentsInput: "",
+    user: null
   }),
   computed: {
-    userAvatar(){
-      console.log(getAuth().currentUser.photoURL)
-      return getAuth().currentUser.photoURL
-    }
+
   },
   mounted() {
+    let auth = getAuth();
+    onAuthStateChanged(auth,(user) => {
+      if(user){
+        this.user = user
+      } else{
+        this.user = null
+      }
+    })
+
     document.getElementById("comments_input")
         .addEventListener("keyup", event => {
           event.preventDefault();
@@ -38,9 +44,14 @@ export default {
         });
   },
   methods: {
-    sendComment(){
-      console.log(getAuth().currentUser.photoURL)
-      window.alert("czesc karola"+this.commentsInput)
+    async sendComment() {
+      if (this.user !== null) {
+        await this.$store.dispatch("makeComment",
+            {comment: this.commentsInput, replyComment: null})
+        this.commentsInput = ""
+      }else{
+        alert("Before you send the comment, please log in")
+      }
     }
   }
 }
@@ -49,5 +60,9 @@ export default {
 <style scoped>
 #comments_input{
   display: flex;
+  align-items: center;
+}
+v-list-item-avatar{
+  margin-bottom: 0;
 }
 </style>

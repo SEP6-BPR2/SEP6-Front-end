@@ -1,13 +1,13 @@
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from "vuex";
-
+import {getAuth} from "firebase/auth";
 Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
-// const backendUrl = "http://localhost:8888"
-const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
+const backendUrl = "http://localhost:8888"
+// const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 
 const moviesToDisplayPerPage = 20
 
@@ -21,7 +21,6 @@ const state = {
     searchResultList: [],
     movieDetails: {},
     trendingList: [],
-    movie: {},
     favouriteList:[],
 }
 
@@ -113,12 +112,12 @@ const actions = {
     },
 
     // Comments
-    makeComment({userId, comment, replyComment}){
-        let url = `${backendUrl}/comments/${userId}/${this.movie.id}`
-        axios.post(url,{replyComment: replyComment, text: comment})
-            .then(response => {
-                console.log(response.data)
-            })
+    // eslint-disable-next-line no-unused-vars
+    async makeComment({commit},{comment, replyComment}){
+        let uid = getAuth().currentUser.uid
+        let url = `${backendUrl}/comments/${uid}/${state.movieDetails.id}`
+        // let json = {replyComment: replyComment, text: comment}
+        await axios.post(url,{replyComment: replyComment, text: comment})
     }
 }
 
