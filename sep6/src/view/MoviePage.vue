@@ -124,16 +124,16 @@
         </div>
       </v-expand-x-transition>
     </v-col>
-
+    <Comments/>
   </v-card>
 </template>
 
 <script>
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-
+import Comments from "@/components/comments/Comments";
 export default {
   name: "MoviePage",
-  components: "",
+  components: {Comments},
   props: {
     movieId: null,
     searchQuery: {

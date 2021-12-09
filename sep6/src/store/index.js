@@ -111,6 +111,15 @@ const actions = {
                 commit('DELETE_FAVOURITE_LIST', response.data, movieId)
             })
     },
+
+    // Comments
+    makeComment({userId, comment, replyComment}){
+        let url = `${backendUrl}/comments/${userId}/${this.movie.id}`
+        axios.post(url,{replyComment: replyComment, text: comment})
+            .then(response => {
+                console.log(response.data)
+            })
+    }
 }
 
 const mutations = {
