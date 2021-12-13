@@ -179,6 +179,8 @@ export default {
       }
     })
 
+    this.$store.dispatch("getFirstOrderComments")
+
     if (this.movie.rating !== null && this.movie.rating !== "N/A" && this.movie.rating !== undefined) {
       this.interval = setInterval(() => {
 
@@ -187,7 +189,6 @@ export default {
         }
       }, 1000)
     }
-
   },
   methods: {
     addFav() {

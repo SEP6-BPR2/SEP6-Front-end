@@ -14,6 +14,9 @@ const moviesToDisplayPerPage = 20
 let movieListOffset = 0
 let searchResultListOffset = 0
 
+let generalCommentsToDisplay = 20
+let generalCommentsOffset = 0
+
 const state = {
     allGenres: [],
     sortOptions: [],
@@ -22,6 +25,7 @@ const state = {
     movieDetails: {},
     trendingList: [],
     favouriteList:[],
+    generalComments: []
 }
 
 const actions = {
@@ -78,6 +82,7 @@ const actions = {
         commit("clearSearchMovieList")
     },
     //Favourites------------------------------------------------
+    // eslint-disable-next-line no-unused-vars
     registerUser({commit},{userId,username,token}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
         console.log(token + "@@@@@")
@@ -116,8 +121,17 @@ const actions = {
     async makeComment({commit},{comment, replyComment}){
         let uid = getAuth().currentUser.uid
         let url = `${backendUrl}/comments/${uid}/${state.movieDetails.id}`
-        // let json = {replyComment: replyComment, text: comment}
         await axios.post(url,{replyComment: replyComment, text: comment})
+    },
+
+    getFirstOrderComments({commit}){
+        console.log("movie id in actions "+state.movieDetails.id)
+        let url = `${backendUrl}/comments/getFirstOrderComments/${state.movieDetails.id}/${generalCommentsToDisplay}/${generalCommentsOffset}`
+        console.log(url)
+        axios.get(url)
+            .then(response => {
+                commit('ADD_GENERAL_COMMENTS', response.data)
+            })
     }
 }
 
@@ -130,6 +144,7 @@ const mutations = {
         searchResultList.forEach(movie =>{state.searchResultList.push(movie)})
     },
     SET_MOVIE_DETAILS(state, movieDetails){
+        console.log(movieDetails)
         state.movieDetails = movieDetails
     },
     SET_All_GENRES(state, genres){
@@ -162,6 +177,10 @@ const mutations = {
         if(status == "200") {
             state.favouriteList = state.favouriteList.filter(id => id != movieId)
         }
+    },
+    //Comments--------------------------------------
+    ADD_GENERAL_COMMENTS(state,comments){
+        state.generalComments = comments
     }
 }
 
