@@ -6,7 +6,6 @@
 
 <script>
 import MovieList from "@/components/MovieList";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 export default {
   name: "FavouritesPage",
   components:{
@@ -21,20 +20,8 @@ export default {
     }
   },
   mounted() {
-    let auth = getAuth();
-    if(this.userId){
-      this.loadMovies(this.userId)
-    }
-    else {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          user.getIdToken(true).then(() => {
-            if (user != null) {
-              this.loadMovies(user.uid)
-            }
-          })
-        }
-      })
+    if(this.$store.state.user.data.uid){
+      this.loadMovies(this.$store.state.user.data.uid)
     }
   },
   methods:{

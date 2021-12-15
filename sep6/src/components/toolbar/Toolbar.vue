@@ -37,10 +37,12 @@ export default {
     ToolbarMenu,
   },
   computed: {
+    loggedIn(){
+      return this.$store.state.user.loggedIn
+    }
   },
   data: () => ({
-    searchInput: "",
-    loggedIn: false,
+    searchInput: ""
   }),
   mounted() {
     document.getElementById("search_field")

@@ -94,9 +94,9 @@ export default {
   }),
   computed:{
     shareURL(){
-      let auth = getAuth()
-      let user = auth.currentUser
-      return 'https://localhost:8080/#/favourites?userId=' + user.uid
+      // console.log("The user is " + JSON.stringify())
+      
+      return 'https://localhost:8080/#/favourites?userId=' + this.$store.state.user.data.uid
     }
   },
   methods:{

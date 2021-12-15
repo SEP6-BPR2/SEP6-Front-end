@@ -24,7 +24,6 @@
 <script>
 import SingIn from "@/components/toolbar/toolbarMenu/cards/SingIn";
 import Account from "@/components/toolbar/toolbarMenu/cards/Account";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "ToolbarMenu",
@@ -34,51 +33,30 @@ export default {
   },
   computed:{
     buttonLabel() {
-      return this.loggedIn ? "Account" : "Sing In"
+      return this.$store.state.user.loggedIn ? "Account" : "Sing In"
+    },
+    loggedIn(){
+      return this.$store.state.user.loggedIn;
+    },
+    id(){
+      return this.$store.state.user.data.uid;
+    },
+    name(){
+      return this.$store.state.user.data.displayName;
+    },
+    picture(){
+      return this.$store.state.user.data.photoURL;
     }
   },
   data(){
     return{
-      loggedIn: false,
-      id: Number,
-      name: String,
-      picture:String,
       shouldCheckOut:false
     }
   },
   methods:{
-    changeLogIn(response){
-      this.id=response.id
-      this.name=response.name
-      this.picture=response.picture
-      this.loggedIn=true
-    },
     changeLogOut(){
-      this.loggedIn= false
       this.shouldCheckOut = true
     },
-    checkLoggedIn(){
-      let VueInstance = this
-      let auth = getAuth();
-      onAuthStateChanged(auth,(user) => {
-        if(user){
-          user.getIdToken(true).then(()=> {
-            if (user != null) {
-              let response = {
-                id: user.uid,
-                name: user.displayName,
-                picture: user.photoURL,
-              }
-              VueInstance.changeLogIn(response)
-            }
-          })
-        }
-      })
-    }
-
-  },
-  mounted() {
-    this.checkLoggedIn()
   }
 }
 </script>

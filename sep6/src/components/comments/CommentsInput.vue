@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "CommentsInput",
@@ -20,21 +19,13 @@ export default {
   },
   data: () => ({
     commentsInput: "",
-    user: null
   }),
   computed: {
-
+    user(){
+      return this.$store.state.user.data
+    }
   },
   mounted() {
-    let auth = getAuth();
-    onAuthStateChanged(auth,(user) => {
-      if(user){
-        this.user = user
-      } else{
-        this.user = null
-      }
-    })
-
     document.getElementById("comments_input")
         .addEventListener("keyup", event => {
           event.preventDefault();

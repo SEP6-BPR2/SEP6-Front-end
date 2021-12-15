@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from "vuex";
-import {getAuth} from "firebase/auth";
+// import {getAuth} from "firebase/auth";
 Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
@@ -25,7 +25,11 @@ const state = {
     movieDetails: {},
     trendingList: [],
     favouriteList:[],
-    generalComments: []
+    generalComments: [],
+    user: {
+        loggedIn: false,
+        data: null
+    }
 }
 
 const actions = {
@@ -83,10 +87,9 @@ const actions = {
     },
     //Favourites------------------------------------------------
     // eslint-disable-next-line no-unused-vars
-    registerUser({commit},{userId,username,token}) {
+    registerUser({commit},{userId,username,token,photoURL}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
-        console.log(token + "@@@@@")
-        axios.post(url,{},{headers: {authorization:token}})
+        axios.post(url,{photoURL:photoURL},{headers: {authorization:token}})
             .then(response => {
                 console.log(JSON.stringify(response.data) + "#########")
                 commit('',response.data)
@@ -119,19 +122,31 @@ const actions = {
     // Comments
     // eslint-disable-next-line no-unused-vars
     async makeComment({commit},{comment, replyComment}){
-        let uid = getAuth().currentUser.uid
+        let uid = state.user.data.uid
         let url = `${backendUrl}/comments/${uid}/${state.movieDetails.id}`
-        await axios.post(url,{replyComment: replyComment, text: comment})
+        console.log(url)
+        console.log(uid)
+        console.log(replyComment)
+        console.log(comment)
+        await axios.post(url,{replyComment: replyComment, text: comment}, {headers: {authorization:state.user.data.stsTokenManager.accessToken}})
     },
 
-    getFirstOrderComments({commit}){
-        console.log("movie id in actions "+state.movieDetails.id)
-        let url = `${backendUrl}/comments/getFirstOrderComments/${state.movieDetails.id}/${generalCommentsToDisplay}/${generalCommentsOffset}`
-        console.log(url)
+    getFirstOrderComments({commit},{movieId}){
+        let url = `${backendUrl}/comments/getFirstOrderComments/${movieId}/${generalCommentsToDisplay}/${generalCommentsOffset}`
         axios.get(url)
-            .then(response => {
-                commit('ADD_GENERAL_COMMENTS', response.data)
-            })
+        .then(response => {
+            commit('ADD_GENERAL_COMMENTS', response.data)
+        })
+    },
+    fetchUser({ commit }, user) {
+        commit("SET_LOGGED_IN", user !== null);
+        if (user) {
+            commit("SET_USER", {
+                ...user
+            });
+        } else {
+            commit("SET_USER", null);
+        }
     }
 }
 
@@ -181,6 +196,18 @@ const mutations = {
     //Comments--------------------------------------
     ADD_GENERAL_COMMENTS(state,comments){
         state.generalComments = comments
+    },
+    SET_LOGGED_IN(state, value) {
+        state.user.loggedIn = value;
+    },
+    SET_USER(state, data) {
+        state.user.data = data;
+
+        if(data){
+            state.user.loggedIn = true;
+        }else{
+            state.user.loggedIn = false;
+        }
     }
 }
 

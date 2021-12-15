@@ -134,7 +134,6 @@
 </template>
 
 <script>
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 import Comments from "@/components/comments/Comments";
 
 export default {
@@ -145,7 +144,6 @@ export default {
       type: String,
       default: ""
     },
-    isLoggedIn: Boolean
   },
   data: () => ({
     interval: {},
@@ -165,21 +163,15 @@ export default {
       return this.$store.state.trendingList.slice(10, 12)
     }
   },
-  async mounted() {
-    let auth = getAuth();
-    await onAuthStateChanged(auth, (user) => {
-      let currentUserId
-      if (user) {
-        this.isLoggedIn = true
-        currentUserId = user.uid
-        this.$store.dispatch("getMovieDetails", {userId: currentUserId, movieId: parseInt(this.searchQuery), num: 1})
-      } else {
-        this.isLoggedIn = false
-        this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery), num: 0})
-      }
-    })
+  mounted() {
+    this.$store.dispatch("getFirstOrderComments", { movieId: parseInt(this.searchQuery)})
 
-    this.$store.dispatch("getFirstOrderComments")
+    console.log("User "+ JSON.stringify(this.$store.state.user))
+    if (this.$store.state.user.isLoggedIn) {
+      this.$store.dispatch("getMovieDetails", {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), num: 1})
+    } else {
+      this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery), num: 0})
+    }
 
     if (this.movie.rating !== null && this.movie.rating !== "N/A" && this.movie.rating !== undefined) {
       this.interval = setInterval(() => {
@@ -192,28 +184,22 @@ export default {
   },
   methods: {
     addFav() {
-      if (this.isLoggedIn) {
+      if (this.$store.state.user.loggedIn) {
         this.performAction(true, "addFavourite")
       } else
         alert("Please log in!")
     },
     removeFav() {
-      if (this.isLoggedIn) {
+      if (this.$store.state.user.loggedIn) {
         this.performAction(false, "deleteFavourite")
       } else
         alert("Please log in!")
     },
     performAction(bool, Action) {
-      // let VueInstance = this
-      let auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          user.getIdToken(true).then((idToken) => {
-            this.$store.state.movieDetails.favorites = bool
-            this.$store.dispatch(Action, {userId: user.uid, movieId: parseInt(this.searchQuery), token: idToken})
-          })
-        }
-      })
+      if (this.$store.state.user.loggedIn) {
+          this.$store.state.movieDetails.favorites = bool
+          this.$store.dispatch(Action, {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), token: this.$store.state.user.data.stsTokenManager.accessToken})
+      }
     }
   }
 }
