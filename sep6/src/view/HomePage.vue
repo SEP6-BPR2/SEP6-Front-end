@@ -75,7 +75,7 @@ export default {
 }
 
 #imgcontainer:hover .overlay {
-  height: 60%;
+  height: 300px;
 }
 
 .overlay {

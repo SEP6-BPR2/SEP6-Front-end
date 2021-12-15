@@ -70,7 +70,6 @@ const actions = {
             .then(response => {
                 commit('SET_MOVIE_INFO', response.data)
             })
-
     },
     clearExploreMovieList({commit}){
         commit("clearExploreMovieList")
@@ -81,7 +80,6 @@ const actions = {
     //Favourites------------------------------------------------
     registerUser({commit},{userId,username,token}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
-        console.log(token + "@@@@@")
         axios.post(url,{},{headers: {authorization:token}})
             .then(response => {
                 console.log(JSON.stringify(response.data) + "#########")

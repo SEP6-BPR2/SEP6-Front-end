@@ -22,7 +22,7 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
       </div>
-        <v-btn v-on:click="moveToExplore" >Explore</v-btn>
+        <v-btn v-on:click="moveToExplore" id="explore_button" >Explore</v-btn>
     </div>
 
   </v-toolbar>
