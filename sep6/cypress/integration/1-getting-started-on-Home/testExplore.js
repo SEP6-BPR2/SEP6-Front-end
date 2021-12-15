@@ -7,7 +7,7 @@ describe('testExploreRouting',()=>{
         cy.get('#explore_button').click()
     })
 
-    it('sort list By title descending for drama genre',()=>{
+    it('sort list By drama genre',()=>{
         cy.get('[data-cy=genre_select]').parent().click({force: true})
         cy.get(".v-list-item__title").contains("Drama").click()
     })

@@ -15,15 +15,5 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-
-Cypress.Cookies.defaults({
-    preserve: (cookie) => {
-        // implement your own logic here
-        // if the function returns truthy
-        // then the cookie will not be cleared
-        // before each test runs
-    },
-})
-
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
