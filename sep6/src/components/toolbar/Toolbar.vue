@@ -42,7 +42,8 @@ export default {
     }
   },
   data: () => ({
-    searchInput: ""
+    searchInput: "",
+    placeholder: ""
   }),
   mounted() {
     document.getElementById("search_field")
@@ -58,8 +59,15 @@ export default {
       this.$router.push("/").catch(err => {this.checkIfTheSamePage(err)})
     },
     moveToSearch(){
-      this.$router.push({name: 'results',query: {doo: this.searchInput}})
-          .catch(err => {this.checkIfTheSamePage(err)})
+      if(this.searchInput != " " && this.searchInput != "" && this.searchInput.length < 101 && /\S/.test(this.searchInput)){
+        this.$router.push({name: 'results',query: {doo: this.searchInput}})
+            .catch(err => {this.checkIfTheSamePage(err)})
+      }else if (this.searchInput.length > 100){
+        alert("Max search character length is 100 characters")
+        this.searchInput = ""
+      }else{
+        this.searchInput = ""
+      }
     },
     moveToExplore(){
       this.$router.push("/explore").catch( err => {this.checkIfTheSamePage(err)})
