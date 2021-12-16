@@ -20,6 +20,8 @@ describe('testExploreRouting',()=>{
     it('sort list By Ascending order',()=>{
         cy.get('[data-cy=order_select]').parent().click({force: true})
         cy.get(".v-list-item__title").contains("ASC").click()
+        cy.get('[data-cy=order_select]').parent().click({force: true})
+        cy.get(".v-list-item__title").contains("ASC").click()
         cy.get('.movie_item').first().get('.title').each((el)=>{
             let title = el[0].innerHTML.trim()
             // || /\d/.test(title) lets forget about numbers cause they are not properly sorted in project
