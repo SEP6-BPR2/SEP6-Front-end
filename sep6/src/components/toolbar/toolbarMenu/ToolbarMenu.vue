@@ -16,24 +16,24 @@
       </template>
 
       <Account v-if="loggedIn==true" v-on:logout="changeLogOut" :id="id" :name="name" :img="picture"></Account>
-      <SingIn ref="signIn" v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SingIn>
+      <SignIn ref="signIn" v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SignIn>
     </v-menu>
   </div>
 </template>
 
 <script>
-import SingIn from "@/components/toolbar/toolbarMenu/cards/SingIn";
+import SignIn from "@/components/toolbar/toolbarMenu/cards/SignIn";
 import Account from "@/components/toolbar/toolbarMenu/cards/Account";
 
 export default {
   name: "ToolbarMenu",
   components: {
-    SingIn,
+    SignIn,
     Account,
   },
   computed:{
     buttonLabel() {
-      return this.$store.state.user.loggedIn ? "Account" : "Sing In"
+      return this.$store.state.user.loggedIn ? "Account" : "Sign In"
     },
     loggedIn(){
       return this.$store.state.user.loggedIn;

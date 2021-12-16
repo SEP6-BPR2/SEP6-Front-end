@@ -96,7 +96,7 @@ export default {
     shareURL(){
       // console.log("The user is " + JSON.stringify())
       
-      return 'https://localhost:8080/#/favourites?userId=' + this.$store.state.user.data.uid
+      return 'https://sep6-back-end-an6w7okvaa-lz.a.run.app/#/favourites?userId=' + this.$store.state.user.data.uid
     }
   },
   methods:{

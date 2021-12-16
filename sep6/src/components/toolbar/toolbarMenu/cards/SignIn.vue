@@ -48,7 +48,7 @@
 import {getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider}  from 'firebase/auth'
 
 export default {
-  name: "SingIn",
+  name: "SignIn",
   data(){
     return{
       googleSignInParams: {
