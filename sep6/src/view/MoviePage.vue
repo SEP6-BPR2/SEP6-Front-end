@@ -146,9 +146,6 @@ export default {
     },
     movie() {
       return this.$store.state.movieDetails
-    },
-    directors() {
-      return this.$store.state.trendingList.slice(10, 12)
     }
   },
   mounted() {

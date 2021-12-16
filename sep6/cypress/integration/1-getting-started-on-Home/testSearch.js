@@ -1,6 +1,6 @@
 describe('testSearching', () => {
     it('Routes to  Search Page',()=>{
-        cy.visit('https://localhost:8080/#/')
+        cy.visit('https://sep6-front-end-an6w7okvaa-uc.a.run.app/#/')
        cy.get('#input-12').type('mama')
         cy.get('#search_button').click()
     })
