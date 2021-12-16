@@ -3,7 +3,7 @@ describe('Proper Movie Page Routing', () => {
 
     it('Routes to  Movie Page',()=>{
         cy.visit('https://sep6-front-end-an6w7okvaa-uc.a.run.app/#/')
-        cy.get('.movie_item').first().trigger('mouseover')
+        cy.get('.movie_item').first().trigger('mouseover',{force: true})
         cy.get('.movie_item').first().get('.title').first().invoke('text').should((text2)=>{
             text = text2
         })
