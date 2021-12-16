@@ -12,6 +12,7 @@ const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 const moviesToDisplayPerPage = 20
 
 let movieListOffset = 0
+let trendingMoviesOffset = 0
 let searchResultListOffset = 0
 
 let generalCommentsToDisplay = 20
@@ -40,6 +41,14 @@ const actions = {
                 commit('SET_MOVIE_LIST', response.data)
             })
         movieListOffset += moviesToDisplayPerPage
+    },
+
+    getTrendingMovieList({commit}, {genre, sort, order}) {
+        axios.get(`${backendUrl}/movies/list/${sort}/${moviesToDisplayPerPage}/${trendingMoviesOffset}/${genre}/${order}`)
+            .then(response => {
+                commit('SET_TRENDING_MOVIE_LIST', response.data)
+            })
+        trendingMoviesOffset += moviesToDisplayPerPage
     },
 
     getSearchResultList({commit}, {searchInput}) {
@@ -76,7 +85,6 @@ const actions = {
             .then(response => {
                 commit('SET_MOVIE_INFO', response.data)
             })
-
     },
     clearExploreMovieList({commit}) {
         commit("clearExploreMovieList")
@@ -88,6 +96,7 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     registerUser({commit}, {userId, username, token, photoURL}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
+
         axios.post(url, {photoURL: photoURL}, {headers: {authorization: token}})
             .then(response => {
                 commit('', response.data)
@@ -160,9 +169,14 @@ const actions = {
 
 const mutations = {
 
-    SET_MOVIE_LIST(state, trendingMovieList) {
-        trendingMovieList.forEach(movie => {
+    SET_MOVIE_LIST(state, movieList) {
+        movieList.forEach(movie => {
             state.movieList.push(movie)
+        })
+    },
+    SET_TRENDING_MOVIE_LIST(state, trendingMovieList) {
+        trendingMovieList.forEach(movie => {
+            state.trendingList.push(movie)
         })
     },
     SET_SEARCH_RESULT_LIST(state, searchResultList) {

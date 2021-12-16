@@ -33,10 +33,10 @@ export default {
   },
   computed: {
     slides() {
-      return this.$store.state.movieList.slice(0, 12)
+      return this.$store.state.trendingList.slice(0, 12)
     },
     movieList() {
-      return this.$store.state.movieList
+      return this.$store.state.trendingList
     }
   },
   mounted() {
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getMovieList", {genre: "any", sort: "year", order: 1})
+      this.$store.dispatch("getTrendingMovieList", {genre: "any", sort: "year", order: 1})
     }
   }
 
@@ -75,7 +75,7 @@ export default {
 }
 
 #imgcontainer:hover .overlay {
-  height: 60%;
+  height: 300px;
 }
 
 .overlay {

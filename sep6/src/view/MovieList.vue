@@ -1,21 +1,30 @@
 <template>
   <div>
 
+    <div v-if="showSort" class="d-inline-flex">
+      <v-select
+          :items="sortBy"
+          label="Sort By"
+          dense
+          outlined
+      ></v-select>
+    </div>
+
     <div class="movie_view row align-md-baseline align-center" ref="movie_list">
-      <v-col class="movie_item col-lg-2 col-md-4 col-6" v-model="movieList"
+      <v-col class="movie_item col-lg-3 col-md-4 col-12" v-model="movieList"
              v-for="(movie, _key)   in movieList" v-on:click="openModal(movie)" @mouseover="activeOver(_key)"
-             @mouseleave="removeOver(_key)" :key="_key" @click="moveToMovie(movie)">
-        <div class="img_container">
-          <img v-if="movie.posterURL !== 'N/A'" class="movie_item_pic" v-bind:src="`${movie.posterURL}`">
-          <img v-else class="default_img movie_item_pic" src="@/assets/no-image.png">
-        </div>
-          <div class="title">
+             @mouseleave="removeOver(_key)" :key="_key">
+        <router-link :to=" {name:'moviePage',query:{searchQuery: movie.id.toString() }}">
+
+          <img id="movie_item_pic" v-bind:src="`${movie.poster}`">
+          <div>
             {{ movie.title }}
           </div>
           <div>
-            {{ movie.year }}
+            {{ movie.release_date }}
           </div>
           <font-awesome-icon v-if="showId==_key" class="icon_movie" icon="eye"/>
+        </router-link>
       </v-col>
     </div>
 
@@ -57,9 +66,6 @@ export default {
     openModal(movie) {
       this.isShow = true
       this.currentMovie = movie
-    },
-    moveToMovie(movie){
-      this.$router.push({name:'moviePage',query:{searchQuery: movie.id.toString() }})
     }
   }
 
@@ -89,21 +95,8 @@ export default {
   position: relative;
 }
 
-.img_container{
-  height: 200pt;
-  width: 135pt;
-  display: inline-grid;
-}
-
-.movie_item_pic {
+#movie_item_pic {
   border-radius: 7px;
-  height: inherit;
-  width: inherit;
-}
-
-.default_img{
-  background-color: #ded9d9;
-  padding: 5px;
 }
 
 .movie_item:hover {
@@ -125,11 +118,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-@media all and (max-width: 479px) {
-  .img_container{
-    height: 95%;
-    width: 95%;
-  }
 
-}
+
 </style>

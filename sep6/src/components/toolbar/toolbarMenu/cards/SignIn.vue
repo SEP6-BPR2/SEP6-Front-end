@@ -25,6 +25,7 @@
       <v-btn
           outlined
           rounded
+          id="login_facebook"
           text
           @click="login('Facebook')"
       >
@@ -34,6 +35,7 @@
       <v-btn
           outlined
           rounded
+          id="login_google"
           text
           @click="login('Google')"
       >
