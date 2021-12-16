@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye,faHeart,faClipboard} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { initializeApp } from "firebase/app";
+import {getAuth} from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -19,7 +20,14 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+
 Vue.use(app)
+getAuth().onAuthStateChanged(user => {
+  store.dispatch("fetchUser", user);
+});
+
+
 library.add(faEye,faHeart,faClipboard)
 
 

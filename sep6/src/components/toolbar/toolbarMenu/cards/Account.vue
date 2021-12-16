@@ -85,7 +85,6 @@ export default {
   data: () => ({
     dialog: false,
     selectedItem: 1,
-    // name:'',
     items: [
       { text: 'Real-Time', icon: 'mdi-clock' },
       { text: 'Audience', icon: 'mdi-account' },
@@ -94,9 +93,8 @@ export default {
   }),
   computed:{
     shareURL(){
-      let auth = getAuth()
-      let user = auth.currentUser
-      return 'https://localhost:8080/#/favourites?userId=' + user.uid
+      
+      return 'https://sep6-back-end-an6w7okvaa-lz.a.run.app/#/favourites?userId=' + this.$store.state.user.data.uid
     }
   },
   methods:{

@@ -50,8 +50,7 @@
 import {getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider}  from 'firebase/auth'
 
 export default {
-  name: "SingIn",
-  props:['shouldCheckOut','userT'],
+  name: "SignIn",
   data(){
     return{
       googleSignInParams: {
@@ -65,24 +64,14 @@ export default {
   },
   methods:{
      login(mediaProv){
-      let VueInstance = this
       let auth = getAuth();
       let provider = mediaProv == "Google" ? new GoogleAuthProvider() : new FacebookAuthProvider()
       signInWithPopup(auth,provider)
-       .then(()=>{
-         let currentUser = auth.currentUser
-         currentUser.getIdToken(true).then((idToken)=>{
-           let response = {
-             id: currentUser.uid,
-             name: currentUser.displayName,
-             picture:currentUser.photoURL,
-           }
-           VueInstance.$emit('logIn',response)
-           this.$store.dispatch("registerUser",{userId: response.id,username: response.name,token: idToken})
-         })
-       }).catch((error) => {
-        console.log("error " + error)
-       })
+        .then(()=>{
+            this.$store.dispatch("registerUser",{userId: this.$store.state.user.data.uid,username: this.$store.state.user.data.displayName,token: this.$store.state.user.data.stsTokenManager.accessToken, photoURL: this.$store.state.user.data.photoURL})
+        }).catch((error) => {
+          console.log("error " + error)
+        })
     },
   }
 }

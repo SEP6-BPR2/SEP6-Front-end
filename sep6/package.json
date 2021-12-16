@@ -14,7 +14,7 @@
     "@kouts/vue-modal": "^2.1.1",
     "core-js": "^3.6.5",
     "cypress": "^9.1.0",
-    "firebase": "^9.5.0",
+    "firebase": "^9.6.1",
     "firebaseui": "^6.0.0",
     "gitart-vue-dialog": "^1.1.0",
     "swiper": "^5.4.5",

@@ -16,69 +16,47 @@
       </template>
 
       <Account v-if="loggedIn==true" v-on:logout="changeLogOut" :id="id" :name="name" :img="picture"></Account>
-      <SingIn ref="signIn" v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SingIn>
+      <SignIn ref="signIn" v-else v-on:logIn="changeLogIn" :shouldCheckOut="shouldCheckOut"></SignIn>
     </v-menu>
   </div>
 </template>
 
 <script>
-import SingIn from "@/components/toolbar/toolbarMenu/cards/SingIn";
+import SignIn from "@/components/toolbar/toolbarMenu/cards/SignIn";
 import Account from "@/components/toolbar/toolbarMenu/cards/Account";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default {
   name: "ToolbarMenu",
   components: {
-    SingIn,
+    SignIn,
     Account,
   },
   computed:{
     buttonLabel() {
-      return this.loggedIn ? "Account" : "Sing In"
+      return this.$store.state.user.loggedIn ? "Account" : "Sign In"
+    },
+    loggedIn(){
+      return this.$store.state.user.loggedIn;
+    },
+    id(){
+      return this.$store.state.user.data.uid;
+    },
+    name(){
+      return this.$store.state.user.data.displayName;
+    },
+    picture(){
+      return this.$store.state.user.data.photoURL;
     }
   },
   data(){
     return{
-      loggedIn: false,
-      id: Number,
-      name: String,
-      picture:String,
       shouldCheckOut:false
     }
   },
   methods:{
-    changeLogIn(response){
-      this.id=response.id
-      this.name=response.name
-      this.picture=response.picture
-      this.loggedIn=true
-    },
     changeLogOut(){
-      this.loggedIn= false
       this.shouldCheckOut = true
     },
-    checkLoggedIn(){
-      let VueInstance = this
-      let auth = getAuth();
-      onAuthStateChanged(auth,(user) => {
-        if(user){
-          user.getIdToken(true).then(()=> {
-            if (user != null) {
-              let response = {
-                id: user.uid,
-                name: user.displayName,
-                picture: user.photoURL,
-              }
-              VueInstance.changeLogIn(response)
-            }
-          })
-        }
-      })
-    }
-
-  },
-  mounted() {
-    this.checkLoggedIn()
   }
 }
 </script>

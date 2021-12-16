@@ -3,23 +3,12 @@
     <div
         class="row rounded-xl movie-info"
     >
-      <div class="col-md-5 col-12">
+      <div class="col-md-5 col-12 image_favorite">
         <img v-if="movie.posterURL !== 'N/A'" class="image" v-bind:src="`${movie.posterURL}`">
         <img v-else class="default_img image" src="@/assets/no-image.png">
-        <div class="">
-          <label class="">Popularity: {{ movie.popularity }}</label>
-        </div>
-        <v-rating
-            v-model="rating"
-            color="yellow darken-3"
-            background-color="grey darken-1"
-            empty-icon="$ratingFull"
-            half-increments
-            hover
-            clearable
-        ></v-rating>
-        {{ rating }}
-        <font-awesome-icon @click="removeFav" v-if="isFav===true" class="icon_movie" style="color:hotpink" icon="heart"/>
+
+        <font-awesome-icon @click="removeFav" v-if="isFav===true" class="icon_movie" style="color:hotpink"
+                           icon="heart"/>
         <font-awesome-icon @click="addFav" v-else class="icon_movie" style="color:gray" icon="heart"/>
 
       </div>
@@ -53,13 +42,11 @@
                 :size="100"
                 :width="4"
                 :value="0"
-            >{{ movie.votes }}</v-progress-circular>
+            >{{ movie.votes }}
+            </v-progress-circular>
             <label>Number of votes</label>
           </div>
         </div>
-
-
-
 
 
         <div class="row text-justify movie-description">
@@ -86,11 +73,14 @@
             class="row align-md-baseline actors rounded-xl mx-auto"
         >
           <h3>Actors:</h3>
-          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="movie.actors"
+          <v-col class=" col-md-3 col-12 actor-card" v-model="movie"
                  v-for="(actor, _key) in movie.actors" :key="_key">
-            <img v-bind:src="`${movie.posterURL}`">
+            <div class="img_person_container">
+              <img v-if="actor.photoURL!==null" class="img_person" v-bind:src="`${actor.photoURL}`">
+              <img v-else src="@/assets/no-image.png" class="img_person default_img">
+            </div>
             <div>
-              {{ actor }}
+              {{ actor.name }}
             </div>
           </v-col>
         </div>
@@ -114,33 +104,34 @@
             class="row align-md-baseline actors rounded-xl mx-auto"
         >
           <h3>Directors:</h3>
-          <v-col class="col-lg-2 col-md-3 col-12 actor-card" v-model="movie.director"
-                 v-for="(director, _key) in [movie.director]" :key="_key">
-            <img v-bind:src="`${movie.posterURL}`">
+          <v-col class="col-md-3 col-12 actor-card" v-model="movie"
+                 v-for="(director, _key) in movie.directors" :key="_key">
+            <div class="img_person_container">
+              <img v-if="director.photoURL!==null" class="img_person" v-bind:src="`${director.photoURL}`">
+              <img v-else src="@/assets/no-image.png" class="img_person default_img">
+            </div>
             <div>
-              {{ director }}
+              {{ director.name }}
             </div>
           </v-col>
         </div>
       </v-expand-x-transition>
     </v-col>
-
+    <Comments v-on:load-more-comments="loadMoreComments"/>
   </v-card>
 </template>
 
 <script>
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+import Comments from "@/components/comments/Comments";
 
 export default {
   name: "MoviePage",
-  components: "",
+  components: {Comments},
   props: {
-    movieId: null,
     searchQuery: {
       type: String,
       default: ""
     },
-    isLoggedIn:Boolean
   },
   data: () => ({
     interval: {},
@@ -150,32 +141,26 @@ export default {
     expand2: false,
   }),
   computed: {
-    isFav(){
+    isFav() {
       return this.$store.state.movieDetails.favorites
     },
-    movie(){
+    movie() {
       return this.$store.state.movieDetails
     },
     directors() {
       return this.$store.state.trendingList.slice(10, 12)
     }
   },
-  async mounted() {
-    let auth = getAuth();
-    await onAuthStateChanged(auth,(user) => {
-      let currentUserId
-      if(user){
-        this.isLoggedIn = true
-        currentUserId = user.uid
-        this.$store.dispatch("getMovieDetails", {userId: currentUserId, movieId: parseInt(this.searchQuery),num: 1})
-      }
-      else{
-        this.isLoggedIn = false
-        this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery),num: 0})
-      }
-    })
+  mounted() {
+    this.$store.dispatch("clearFirstOrderComments")
+    this.loadMoreComments()
+    if (this.$store.state.user.loggedIn) {
+      this.$store.dispatch("getMovieDetails", {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), num: 1})
+    } else {
+      this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery), num: 0})
+    }
 
-    if(this.movie.rating!==null && this.movie.rating!=="N/A" && this.movie.rating!==undefined) {
+    if (this.movie.rating !== null && this.movie.rating !== "N/A" && this.movie.rating !== undefined) {
       this.interval = setInterval(() => {
 
         while (this.value !== this.movie.rating * 10) {
@@ -183,34 +168,28 @@ export default {
         }
       }, 1000)
     }
-
   },
-  methods:{
-    addFav(){
-      if(this.isLoggedIn){
-        this.performAction(true,"addFavourite")
-      }
-      else
+  methods: {
+    addFav() {
+      if (this.$store.state.user.loggedIn) {
+        this.performAction(true, "addFavourite")
+      } else
         alert("Please log in!")
     },
-    removeFav(){
-      if(this.isLoggedIn){
-        this.performAction(false,"deleteFavourite")
-      }
-      else
+    removeFav() {
+      if (this.$store.state.user.loggedIn) {
+        this.performAction(false, "deleteFavourite")
+      } else
         alert("Please log in!")
     },
-    performAction(bool,Action){
-      // let VueInstance = this
-      let auth = getAuth();
-      onAuthStateChanged(auth,(user) => {
-        if(user){
-          user.getIdToken(true).then((idToken)=>{
-            this.$store.state.movieDetails.favorites = bool
-            this.$store.dispatch(Action,{userId: user.uid,movieId: parseInt(this.searchQuery),token: idToken})
-          })
-        }
-      })
+    performAction(bool, Action) {
+      if (this.$store.state.user.loggedIn) {
+          this.$store.state.movieDetails.favorites = bool
+          this.$store.dispatch(Action, {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), token: this.$store.state.user.data.stsTokenManager.accessToken})
+      }
+    },
+    loadMoreComments() {
+      this.$store.dispatch("getFirstOrderComments", { movieId: parseInt(this.searchQuery)})
     }
   }
 }
@@ -252,7 +231,8 @@ export default {
   width: 250pt;
   height: 350pt;
 }
-.default_img{
+
+.default_img {
   background-color: #ded9d9;
 }
 
@@ -268,13 +248,6 @@ div {
   background: #224747;
 }
 
-.actor-card {
-  -webkit-transform: scale(0.75); /* Saf3.1+, Chrome */
-  -moz-transform: scale(0.75); /* FF3.5+ */
-  -ms-transform: scale(0.75); /* IE9 */
-  -o-transform: scale(0.75); /* Opera 10.5+ */
-  transform: scale(0.75);
-}
 
 /*for mobile device*/
 @media all and (max-width: 479px) {
@@ -283,10 +256,28 @@ div {
     height: 250pt;
   }
 }
-.icon_movie{
+
+.icon_movie {
   width: 30px;
   height: auto;
-  margin-left: 10px;
+  margin-top: 10pt;
+}
+
+.img_person_container {
+  height: 200pt;
+  width: 135pt;
+  display: inline-grid;
+}
+
+.img_person {
+  border-radius: 7px;
+  height: inherit;
+  width: inherit;
+}
+.image_favorite{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 </style>
