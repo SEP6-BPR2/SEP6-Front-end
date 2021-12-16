@@ -24,7 +24,6 @@ const app = initializeApp(firebaseConfig);
 
 Vue.use(app)
 getAuth().onAuthStateChanged(user => {
-  console.log(JSON.stringify(user))
   store.dispatch("fetchUser", user);
 });
 

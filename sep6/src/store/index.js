@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'
 
-const backendUrl = "http://localhost:8888"
-// const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
+// const backendUrl = "http://localhost:8888"
+const backendUrl = "https://sep6-back-end-an6w7okvaa-lz.a.run.app"
 
 const moviesToDisplayPerPage = 20
 
@@ -24,7 +24,7 @@ const state = {
     searchResultList: [],
     movieDetails: {},
     trendingList: [],
-    favouriteList:[],
+    favouriteList: [],
     generalComments: [],
     user: {
         loggedIn: false,
@@ -39,34 +39,33 @@ const actions = {
             .then(response => {
                 commit('SET_MOVIE_LIST', response.data)
             })
-        movieListOffset+=moviesToDisplayPerPage
+        movieListOffset += moviesToDisplayPerPage
     },
 
-    getSearchResultList({commit},{searchInput}) {
+    getSearchResultList({commit}, {searchInput}) {
         let url = `${backendUrl}/movies/search/year/${moviesToDisplayPerPage}/${searchResultListOffset}/any/1/${searchInput}`
         axios.get(url)
             .then(response => {
                 commit('SET_SEARCH_RESULT_LIST', response.data)
             })
-        searchResultListOffset+=moviesToDisplayPerPage
+        searchResultListOffset += moviesToDisplayPerPage
     },
 
-    getMovieDetails({commit},{userId,movieId,num}) {
+    getMovieDetails({commit}, {userId, movieId, num}) {
         let url = `${backendUrl}/movies/details/${movieId}/${num}/${userId}`
-        console.log(url)
         axios.get(url)
             .then(response => {
                 commit('SET_MOVIE_DETAILS', response.data)
             })
     },
 
-    getAllGenres({commit}){
+    getAllGenres({commit}) {
         axios.get(`${backendUrl}/genres/all`)
             .then(response => {
                 commit('SET_All_GENRES', response.data)
             })
     },
-    getSortingOptions({commit}){
+    getSortingOptions({commit}) {
         axios.get(`${backendUrl}/movies/sorting`)
             .then(response => {
                 commit('SET_SORTING_OPTIONS', response.data)
@@ -79,41 +78,40 @@ const actions = {
             })
 
     },
-    clearExploreMovieList({commit}){
+    clearExploreMovieList({commit}) {
         commit("clearExploreMovieList")
     },
-    clearSearchMovieList({commit}){
+    clearSearchMovieList({commit}) {
         commit("clearSearchMovieList")
     },
     //Favourites------------------------------------------------
     // eslint-disable-next-line no-unused-vars
-    registerUser({commit},{userId,username,token,photoURL}) {
+    registerUser({commit}, {userId, username, token, photoURL}) {
         let url = `${backendUrl}/users/register/${userId}/${username}`
-        axios.post(url,{photoURL:photoURL},{headers: {authorization:token}})
+        axios.post(url, {photoURL: photoURL}, {headers: {authorization: token}})
             .then(response => {
-                console.log(JSON.stringify(response.data) + "#########")
-                commit('',response.data)
+                commit('', response.data)
             })
-            .catch(error =>{
+            .catch(error => {
                 console.log(error)
             })
     },
-    getFavourites({commit},{userId}) {
-        let url =`${backendUrl}/favorites/${userId}`
+    getFavourites({commit}, {userId}) {
+        let url = `${backendUrl}/favorites/${userId}`
         axios.get(url)
             .then(response => {
                 commit('SET_FAVOURITE_LIST', response.data)
             })
     },
-    addFavourite({commit},{userId, movieId,token}) {
-        let url =`${backendUrl}/favorites/${userId}/${movieId}`
-        axios.post(url,{},{headers: {authorization:token}})
+    addFavourite({commit}, {userId, movieId, token}) {
+        let url = `${backendUrl}/favorites/${userId}/${movieId}`
+        axios.post(url, {}, {headers: {authorization: token}})
             .then(response => {
-                commit('ADD_FAVOURITE_LIST', response.data,movieId)
+                commit('ADD_FAVOURITE_LIST', response.data, movieId)
             })
     },
-    deleteFavourite({commit},{userId, movieId,token}) {
-        axios.delete(`${backendUrl}/favorites/${userId}/${movieId}`,{headers: {authorization:token}})
+    deleteFavourite({commit}, {userId, movieId, token}) {
+        axios.delete(`${backendUrl}/favorites/${userId}/${movieId}`, {headers: {authorization: token}})
             .then(response => {
                 commit('DELETE_FAVOURITE_LIST', response.data, movieId)
             })
@@ -121,24 +119,34 @@ const actions = {
 
     // Comments
     // eslint-disable-next-line no-unused-vars
-    async makeComment({commit},{comment, replyComment}){
+    makeComment({commit}, {comment, replyComment}) {
         let uid = state.user.data.uid
         let url = `${backendUrl}/comments/${uid}/${state.movieDetails.id}`
-        console.log(url)
-        console.log(uid)
-        console.log(replyComment)
-        console.log(comment)
-        await axios.post(url,{replyComment: replyComment, text: comment}, {headers: {authorization:state.user.data.stsTokenManager.accessToken}})
+        axios.post(url, {
+            replyComment: replyComment,
+            text: comment
+        }, {headers: {authorization: state.user.data.stsTokenManager.accessToken}})
+            .then(()=> {
+                let url = `${backendUrl}/comments/getFirstOrderComments/${state.movieDetails.id}/1/0`
+                axios.get(url)
+                    .then(response => {
+                        commit("addComment", response.data)
+                    })
+            })
     },
 
-    getFirstOrderComments({commit},{movieId}){
+    getFirstOrderComments({commit}, {movieId}) {
         let url = `${backendUrl}/comments/getFirstOrderComments/${movieId}/${generalCommentsToDisplay}/${generalCommentsOffset}`
         axios.get(url)
-        .then(response => {
-            commit('ADD_GENERAL_COMMENTS', response.data)
-        })
+            .then(response => {
+                commit('ADD_GENERAL_COMMENTS', response.data)
+            })
+        generalCommentsOffset += generalCommentsToDisplay
     },
-    fetchUser({ commit }, user) {
+    clearFirstOrderComments({commit}) {
+        commit("clearGeneralComments")
+    },
+    fetchUser({commit}, user) {
         commit("SET_LOGGED_IN", user !== null);
         if (user) {
             commit("SET_USER", {
@@ -153,19 +161,22 @@ const actions = {
 const mutations = {
 
     SET_MOVIE_LIST(state, trendingMovieList) {
-        trendingMovieList.forEach(movie =>{state.movieList.push(movie)})
+        trendingMovieList.forEach(movie => {
+            state.movieList.push(movie)
+        })
     },
     SET_SEARCH_RESULT_LIST(state, searchResultList) {
-        searchResultList.forEach(movie =>{state.searchResultList.push(movie)})
+        searchResultList.forEach(movie => {
+            state.searchResultList.push(movie)
+        })
     },
-    SET_MOVIE_DETAILS(state, movieDetails){
-        console.log(movieDetails)
+    SET_MOVIE_DETAILS(state, movieDetails) {
         state.movieDetails = movieDetails
     },
-    SET_All_GENRES(state, genres){
+    SET_All_GENRES(state, genres) {
         state.allGenres = genres.genres
     },
-    SET_SORTING_OPTIONS(state, sortOptions){
+    SET_SORTING_OPTIONS(state, sortOptions) {
         state.sortOptions = sortOptions.sortingOptions
     },
     SET_MOVIE_INFO(state, movie) {
@@ -180,32 +191,40 @@ const mutations = {
         searchResultListOffset = 0
     },
     //Favourites------------------------------------
-    SET_FAVOURITE_LIST(state,favouriteList){
+    SET_FAVOURITE_LIST(state, favouriteList) {
         state.favouriteList = favouriteList.movies
     },
-    ADD_FAVOURITE_LIST(state,status,movieId){
-        if(status == "200"){
+    ADD_FAVOURITE_LIST(state, status, movieId) {
+        if (status == "200") {
             state.favouriteList.push(movieId)
         }
     },
-    DELETE_FAVOURITE_LIST(state,status,movieId){
-        if(status == "200") {
+    DELETE_FAVOURITE_LIST(state, status, movieId) {
+        if (status == "200") {
             state.favouriteList = state.favouriteList.filter(id => id != movieId)
         }
     },
     //Comments--------------------------------------
-    ADD_GENERAL_COMMENTS(state,comments){
-        state.generalComments = comments
+    ADD_GENERAL_COMMENTS(state, comments) {
+        comments.forEach(comment => state.generalComments.push(comment))
     },
     SET_LOGGED_IN(state, value) {
         state.user.loggedIn = value;
     },
+    clearGeneralComments(state) {
+        state.generalComments = []
+        generalCommentsOffset = 0
+    },
+    addComment(state, comment) {
+        state.generalComments.unshift(comment[0])
+        generalCommentsOffset += 1
+    },
     SET_USER(state, data) {
         state.user.data = data;
 
-        if(data){
+        if (data) {
             state.user.loggedIn = true;
-        }else{
+        } else {
             state.user.loggedIn = false;
         }
     }

@@ -35,9 +35,9 @@ export default {
         });
   },
   methods: {
-    async sendComment() {
+    sendComment() {
       if (this.user !== null) {
-        await this.$store.dispatch("makeComment",
+        this.$store.dispatch("makeComment",
             {comment: this.commentsInput, replyComment: null})
         this.commentsInput = ""
       }else{
@@ -52,6 +52,7 @@ export default {
 #comments_input{
   display: flex;
   align-items: center;
+  padding: 5pt;
 }
 v-list-item-avatar{
   margin-bottom: 0;
