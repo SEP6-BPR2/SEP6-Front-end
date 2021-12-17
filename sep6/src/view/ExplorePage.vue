@@ -7,7 +7,8 @@
       <v-select
           v-model="chosenGenre"
           hide-details
-          class="toolbar-left-item"
+          class="toolbar-left-item "
+          data-cy='genre_select'
           :items="genres"
           label="Genre"
           dense
@@ -17,6 +18,7 @@
       <v-select
           v-model="chosenSort"
           :items="sortOptions"
+          data-cy='sortBy_select'
           label="Sort By"
           dense
           outlined
@@ -25,6 +27,7 @@
       <v-select
           v-model="chosenOrder"
           :items="orders"
+          data-cy='order_select'
           label="Order"
           dense
           outlined
@@ -98,6 +101,7 @@ export default {
 </script>
 
 <style scoped>
+
 .list_movies {
   margin-top: 100pt;
 }

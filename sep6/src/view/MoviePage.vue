@@ -3,22 +3,10 @@
     <div
         class="row rounded-xl movie-info"
     >
-      <div class="col-md-5 col-12">
+      <div class="col-md-5 col-12 image_favorite">
         <img v-if="movie.posterURL !== 'N/A'" class="image" v-bind:src="`${movie.posterURL}`">
         <img v-else class="default_img image" src="@/assets/no-image.png">
-        <div class="">
-          <label class="">Popularity: {{ movie.popularity }}</label>
-        </div>
-        <v-rating
-            v-model="rating"
-            color="yellow darken-3"
-            background-color="grey darken-1"
-            empty-icon="$ratingFull"
-            half-increments
-            hover
-            clearable
-        ></v-rating>
-        {{ rating }}
+
         <font-awesome-icon @click="removeFav" v-if="isFav===true" class="icon_movie" style="color:hotpink"
                            icon="heart"/>
         <font-awesome-icon @click="addFav" v-else class="icon_movie" style="color:gray" icon="heart"/>
@@ -129,7 +117,7 @@
         </div>
       </v-expand-x-transition>
     </v-col>
-    <Comments/>
+    <Comments v-on:load-more-comments="loadMoreComments"/>
   </v-card>
 </template>
 
@@ -158,16 +146,12 @@ export default {
     },
     movie() {
       return this.$store.state.movieDetails
-    },
-    directors() {
-      return this.$store.state.trendingList.slice(10, 12)
     }
   },
   mounted() {
-    this.$store.dispatch("getFirstOrderComments", { movieId: parseInt(this.searchQuery)})
-
-    console.log("User "+ JSON.stringify(this.$store.state.user))
-    if (this.$store.state.user.isLoggedIn) {
+    this.$store.dispatch("clearFirstOrderComments")
+    this.loadMoreComments()
+    if (this.$store.state.user.loggedIn) {
       this.$store.dispatch("getMovieDetails", {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), num: 1})
     } else {
       this.$store.dispatch("getMovieDetails", {userId: 'none', movieId: parseInt(this.searchQuery), num: 0})
@@ -200,6 +184,9 @@ export default {
           this.$store.state.movieDetails.favorites = bool
           this.$store.dispatch(Action, {userId: this.$store.state.user.data.uid, movieId: parseInt(this.searchQuery), token: this.$store.state.user.data.stsTokenManager.accessToken})
       }
+    },
+    loadMoreComments() {
+      this.$store.dispatch("getFirstOrderComments", { movieId: parseInt(this.searchQuery)})
     }
   }
 }
@@ -270,7 +257,7 @@ div {
 .icon_movie {
   width: 30px;
   height: auto;
-  margin-left: 10px;
+  margin-top: 10pt;
 }
 
 .img_person_container {
@@ -283,6 +270,11 @@ div {
   border-radius: 7px;
   height: inherit;
   width: inherit;
+}
+.image_favorite{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 </style>

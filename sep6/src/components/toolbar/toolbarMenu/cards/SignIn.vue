@@ -24,6 +24,7 @@
       <v-btn
           outlined
           rounded
+          id="login_facebook"
           text
           @click="login('Facebook')"
       >
@@ -33,6 +34,7 @@
       <v-btn
           outlined
           rounded
+          id="login_google"
           text
           @click="login('Google')"
       >
@@ -47,7 +49,7 @@
 import {getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider}  from 'firebase/auth'
 
 export default {
-  name: "SingIn",
+  name: "SignIn",
   data(){
     return{
       googleSignInParams: {
