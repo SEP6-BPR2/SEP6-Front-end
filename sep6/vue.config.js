@@ -3,6 +3,7 @@ module.exports = {
     'vuetify'
   ],
   devServer: {
+    host: 'localhost',
     proxy: 'https://lh3.googleusercontent.com',
   }
 }

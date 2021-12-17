@@ -3,7 +3,6 @@
       elevation="10"
       class="mx-auto"
       max-width="344"
-      loading
   >
     <v-list-item three-line>
       <v-list-item-content>
