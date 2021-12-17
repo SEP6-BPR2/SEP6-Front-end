@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 describe('Proper Movie Page Routing', () => {
     let text
 
