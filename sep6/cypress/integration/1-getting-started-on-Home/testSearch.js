@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 describe('testSearching', () => {
     it('Routes to  Search Page',()=>{
         cy.visit('https://sep6-front-end-an6w7okvaa-uc.a.run.app/#/')
