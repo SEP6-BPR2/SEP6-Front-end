@@ -32,7 +32,7 @@ export default new VueRouter({
             path: "/results",
             name: "results",
             component: SearchPage,
-            props: (route)=>({doo: route.query.doo}),
+            props: (route)=>({searchInput: route.query.searchInput}),
         },
         {
             path: "/explore",

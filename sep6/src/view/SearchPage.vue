@@ -11,13 +11,13 @@ export default {
   name: "SearchPage",
   components: {MovieList},
   props: {
-    doo: {
+    searchInput: {
       type: String,
       default: "",
     },
   },
   watch: {
-    doo: {
+    searchInput: {
       handler: function () {
         this.$store.dispatch("clearSearchMovieList")
         this.loadMoreMovies()
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     loadMoreMovies() {
-      this.$store.dispatch("getSearchResultList", {searchInput: this.doo})
+      this.$store.dispatch("getSearchResultList", {searchInput: this.searchInput})
     },
   }
 }

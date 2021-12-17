@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from "vuex";
-// import {getAuth} from "firebase/auth";
 Vue.use(Vuex)
 
 const APIKEY = '4f8f2699713f7c3cc1758f5f2f2ed5e7'

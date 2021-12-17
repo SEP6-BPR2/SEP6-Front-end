@@ -60,7 +60,7 @@ export default {
     },
     moveToSearch(){
       if(this.searchInput != " " && this.searchInput != "" && this.searchInput.length < 101 && /\S/.test(this.searchInput)){
-        this.$router.push({name: 'results',query: {doo: this.searchInput}})
+        this.$router.push({name: 'results',query: {searchInput: this.searchInput}})
             .catch(err => {this.checkIfTheSamePage(err)})
       }else if (this.searchInput.length > 100){
         alert("Max search character length is 100 characters")
